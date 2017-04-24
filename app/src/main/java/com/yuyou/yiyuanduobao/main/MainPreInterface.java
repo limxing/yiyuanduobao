@@ -6,4 +6,7 @@ package com.yuyou.yiyuanduobao.main;
  */
 public interface MainPreInterface {
      void destory();
+
+    void pay();
+
 }

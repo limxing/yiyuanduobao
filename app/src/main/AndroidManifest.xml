@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".MainActivity">
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,10 +47,7 @@
             android:name="wostore_channel_data_chid"
             android:value="chid_00023329" />
 
-        <activity
-            android:name=".main.MainActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
+
     </application>
 
 </manifest>

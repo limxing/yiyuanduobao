@@ -9,6 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import butterknife.ButterKnife;
+import me.leefeng.library.NoTitleBar.StatusBarCompat;
+import me.leefeng.library.NoTitleBar.SystemBarTintManager;
+
 /**
  * @author FengTing
  * @date 2017/04/24 16:00:40
@@ -19,7 +23,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarCompat.translucentStatusBar(this);
         setContentView(getContentView());
+        View topView = findViewById(R.id.title_topview);
+        if (topView!=null){
+           int height= StatusBarCompat.getStatusBarHeight(this);
+            topView.getLayoutParams().height = height;
+        }
+        ButterKnife.bind( this ) ;
         mContext = this;
         initView();
         initData();
