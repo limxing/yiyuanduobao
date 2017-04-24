@@ -35,7 +35,7 @@
             android:excludeFromRecents="true"
             android:exported="true"
             android:launchMode="singleInstance"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <meta-data
             android:name="wostore_channel_data_cpid"
@@ -48,6 +48,10 @@
             android:value="chid_00023329" />
 
 
+        <activity
+            android:name=".paymore.PaymoreActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
     </application>
 
 </manifest>

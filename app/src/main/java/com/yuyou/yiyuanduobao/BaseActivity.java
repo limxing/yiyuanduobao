@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -26,11 +27,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         StatusBarCompat.translucentStatusBar(this);
         setContentView(getContentView());
         View topView = findViewById(R.id.title_topview);
-        if (topView!=null){
-           int height= StatusBarCompat.getStatusBarHeight(this);
+        if (topView != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int height = StatusBarCompat.getStatusBarHeight(this);
             topView.getLayoutParams().height = height;
         }
-        ButterKnife.bind( this ) ;
+        ButterKnife.bind(this);
         mContext = this;
         initView();
         initData();
