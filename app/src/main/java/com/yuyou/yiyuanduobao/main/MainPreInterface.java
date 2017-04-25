@@ -9,4 +9,7 @@ public interface MainPreInterface {
 
     void pay();
 
+    void login(String phone);
+
+    void isBuy(int position);
 }

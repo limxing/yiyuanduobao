@@ -12,6 +12,11 @@
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
 
+    <!--Bom后端云-->
+    <!--保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
     <application
         android:name=".ProjectApplication"
         android:allowBackup="true"
@@ -22,11 +27,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
         <activity android:name=".main.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <service android:name="com.unicom.wostore.unipay.paysecurity.SecurityServiceFramework" />
         <activity
@@ -52,6 +53,26 @@
             android:name=".paymore.PaymoreActivity"
             android:configChanges="orientation|keyboardHidden"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".welcome.WelcomeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".login.LoginActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name=".newplay.NewPlayerActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/FullScreen"/>
+        <service
+            android:name=".download.DownLoadService"
+            android:priority="1000" />
     </application>
 
 </manifest>

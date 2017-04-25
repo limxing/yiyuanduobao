@@ -19,7 +19,7 @@ import me.leefeng.library.utils.LogUtils;
 public class HttpSend {
     //private static Handler handler;
     public static class Constant {
-        public static String TAG = "";
+        public static String TAG = "HttpSend";
     }
 
     public static String post(final String url, final String body) {

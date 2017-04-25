@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import butterknife.ButterKnife;
 import me.leefeng.library.NoTitleBar.StatusBarCompat;
 import me.leefeng.library.NoTitleBar.SystemBarTintManager;
+import me.leefeng.library.SVProgressHUD.SVProgressHUD;
 
 /**
  * @author FengTing
@@ -20,6 +21,7 @@ import me.leefeng.library.NoTitleBar.SystemBarTintManager;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     protected Context mContext;
+    protected SVProgressHUD svp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +36,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mContext = this;
         initView();
+        svp = new SVProgressHUD(mContext);
         initData();
         registBrodcast();//注册广播
+
     }
 
     protected abstract void initData();
