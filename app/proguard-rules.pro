@@ -111,3 +111,11 @@
       #####FastJson####
 -dontwarn com.alibaba.fastjson.**
 -keep class com.alibaba.fastjson.** { *; }
+
+# #  ######## greenDao混淆  ##########
+# # -------------------------------------------
+-keep class de.greenrobot.dao.** {*;}
+-keepclassmembers class * extends de.greenrobot.dao.AbstractDao {
+    public static Java.lang.String TABLENAME;
+}
+-keep class **$Properties

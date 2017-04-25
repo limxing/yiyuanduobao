@@ -1,7 +1,6 @@
 package com.yuyou.yiyuanduobao.main;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -16,7 +15,6 @@ import com.yuyou.yiyuanduobao.R;
 import com.yuyou.yiyuanduobao.newplay.NewPlayerActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.leefeng.library.utils.SharedPreferencesUtil;
 
@@ -47,6 +45,7 @@ public class MainActivity extends BaseActivity implements MainView, AdapterView.
             initUser();
         }
         presenter.initUpdata();
+
     }
 
     @Override
@@ -151,6 +150,7 @@ public class MainActivity extends BaseActivity implements MainView, AdapterView.
     }
 
     private void initUser() {
+
         Long account = ProjectApplication.user.getAccount();
         if (account == null) {
             titleTvRight.setText(0 + "");

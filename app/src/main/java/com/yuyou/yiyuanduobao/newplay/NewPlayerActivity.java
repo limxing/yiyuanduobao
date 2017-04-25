@@ -141,7 +141,8 @@ public class NewPlayerActivity extends BaseActivity implements View.OnClickListe
                 player.setTitle(playerItemBeanList.get(current).getName());
                 file = new File(playerItemBeanList.get(current).getPath());
                 if (file.exists()) {
-                    player.setUrl(file.toString()).play(0);;
+                    player.setUrl(file.toString()).play(0);
+                    ;
                 } else {
                     player.play(playerItemBeanList.get(current).getUrl());
                 }
@@ -151,25 +152,25 @@ public class NewPlayerActivity extends BaseActivity implements View.OnClickListe
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(this);
-
+        fab.setVisibility(View.GONE);
 
         isShow = true;
-        newplayer_recycleview.setOnScrollListener(new RecyclerView.OnScrollListener() {
-
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (isDownloadController) return;
-                if (dy > 2 && isShow) {
-                    isShow = false;
-                    translationY(fab, 0, 300);
-                } else if (dy < -1 && !isShow) {
-                    isShow = true;
-                    translationY(fab, 300, 0);
-                }
-            }
-        });
+//        newplayer_recycleview.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                if (isDownloadController) return;
+//                if (dy > 2 && isShow) {
+//                    isShow = false;
+//                    translationY(fab, 0, 300);
+//                } else if (dy < -1 && !isShow) {
+//                    isShow = true;
+//                    translationY(fab, 300, 0);
+//                }
+//            }
+//        });
 
     }
 
@@ -226,7 +227,7 @@ public class NewPlayerActivity extends BaseActivity implements View.OnClickListe
                 /**
                  * 监听视频播放失败的回调
                  */
-                ToastUtils.showLong(mContext,"播放失败");
+                ToastUtils.showLong(mContext, "播放失败");
 
             }
         }).setTitle(playerItemBeanList.get(current).getName())//设置视频的titleName

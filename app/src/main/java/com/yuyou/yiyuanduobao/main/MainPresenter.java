@@ -58,6 +58,7 @@ public class MainPresenter implements MainPreInterface {
         mainView.setAdapter(adapter);
 //        updateCourse();
 //        initUpdata();
+
     }
 
     @Override
@@ -73,6 +74,7 @@ public class MainPresenter implements MainPreInterface {
 
     @Override
     public void login(String phone) {
+
         BmobQuery<User> query = new BmobQuery<>();
         query.addWhereEqualTo("phone", phone);
         query.findObjects(new FindListener<User>() {
@@ -95,11 +97,17 @@ public class MainPresenter implements MainPreInterface {
      */
     @Override
     public void isBuy(int position) {
-        boolean isBuy=adapter.getList().get(position).isBuy();
-        if (!isBuy){
+        boolean isBuy=adapter.isBuy(position);
+        if (isBuy){
             mainView.openPlayer(position);
         }else{
-
+            if (ProjectApplication.user==null){
+                //去登陆
+            }else {
+//                BuyData buyData=  new BuyData(adapter.getList().get(position).getId(), ProjectApplication.user.getPhone());
+//                buyData.save();
+//                adapter.notifyBuydata();
+            }
         }
     }
 

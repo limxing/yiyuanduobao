@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'//butterknife增加这一句增加这一句
+apply plugin: 'org.greenrobot.greendao' // apply plugin
 
 android {
     compileSdkVersion 25
@@ -24,6 +25,11 @@ android {
         exclude 'LICENSE.txt'
         exclude 'META-INF/rxjava.properties'
         // ... and any other excludes Go here
+    }
+    greendao{
+        schemaVersion 1
+        daoPackage 'com.yuyou.yiyuanduobao'
+        targetGenDir 'src/main/java'
     }
 }
 
@@ -68,4 +74,8 @@ dependencies {
     //带指示器的recycleView
     compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
     compile 'me.leefeng:player:1.6.1'
+//greenDao
+    compile 'org.greenrobot:greendao:3.2.0' // add library
+
+    compile 'com.github.satyan:sugar:1.3'
 }
