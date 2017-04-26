@@ -1,5 +1,6 @@
 package com.yuyou.yiyuanduobao.main;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -20,12 +21,44 @@ import java.util.List;
  * Created by limxing on 2016/10/28.
  */
 
-public class VideoAdapter extends BaseAdapter {
+public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ItemView> {
 
     private List<Course> list;
 
     public VideoAdapter() {
-        if (ProjectApplication.user != null){}
+        if (ProjectApplication.user != null) {
+        }
+    }
+
+    @Override
+    public ItemView onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = View.inflate(parent.getContext(), R.layout.fragment_video_item, null);
+        return new ItemView(v);
+    }
+
+    @Override
+    public void onBindViewHolder(ItemView holder, int i) {
+
+
+        holder.name.setText(list.get(i).getName());
+
+        holder.teacher.setText("讲师：" + list.get(i).getTeacher());
+
+        holder.isBuy.setText("￥ 1.00");
+//        isBuyView.setVisibility(View.INVISIBLE);
+        List<BuyData> buys = ProjectApplication.buyList;
+        if (buys != null)
+            for (BuyData buyData : buys) {
+                if (buyData.getCourseid().equals(list.get(i).getId())) {
+                    holder.isBuy.setText("已购买");
+                    break;
+                }
+            }
+        Glide.with(holder.pic.getContext())
+                .load(list.get(i).getPic())
+                .placeholder(R.drawable.empty_photo)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .into(holder.pic);
     }
 
     public void setList(List<Course> list) {
@@ -36,16 +69,6 @@ public class VideoAdapter extends BaseAdapter {
         return list;
     }
 
-    @Override
-    public int getCount() {
-        if (list == null) return 0;
-        return list.size();
-    }
-
-    @Override
-    public Object getItem(int i) {
-        return list.get(i);
-    }
 
     @Override
     public long getItemId(int i) {
@@ -53,32 +76,11 @@ public class VideoAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        View v = View.inflate(viewGroup.getContext(), R.layout.fragment_video_item, null);
-        TextView name = (TextView) v.findViewById(R.id.video_item_name);
-        name.setText(list.get(i).getName());
-        TextView teacher = (TextView) v.findViewById(R.id.video_item_teacher);
-        teacher.setText("讲师：" + list.get(i).getTeacher());
-        TextView isBuyView = (TextView) v.findViewById(R.id.video_item_isbuy);
-        isBuyView.setText("￥ 1.00");
-//        isBuyView.setVisibility(View.INVISIBLE);
-        List<BuyData> buys = ProjectApplication.buyList;
-        if (buys != null)
-            for (BuyData buyData : buys) {
-                if (buyData.getCourseid().equals(list.get(i).getId())) {
-                    isBuyView.setText("已购买");
-                    break;
-                }
-            }
-
-        ImageView imageView = (ImageView) v.findViewById(R.id.video_item_pic);
-        Glide.with(viewGroup.getContext())
-                .load(list.get(i).getPic())
-                .placeholder(R.drawable.empty_photo)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(imageView);
-        return v;
+    public int getItemCount() {
+        if (list == null) return 0;
+        return list.size();
     }
+
 
     public boolean isBuy(int position) {
         List<BuyData> buys = ProjectApplication.buyList;
@@ -95,10 +97,26 @@ public class VideoAdapter extends BaseAdapter {
     public void notifyBuydata() {
         if (ProjectApplication.user != null)
 //            buyList = Select.from(BuyData.class).where(Condition.prop("phone").eq(ProjectApplication.user.getPhone())).list();
-        notifyDataSetChanged();
+            notifyDataSetChanged();
     }
 
     public String getCourseId(int position) {
         return list.get(position).getId();
+    }
+
+    public static class ItemView extends RecyclerView.ViewHolder {
+
+       ImageView pic;
+        TextView name;
+        TextView teacher;
+        TextView isBuy;
+
+        public ItemView(View itemView) {
+            super(itemView);
+            name = (TextView) itemView.findViewById(R.id.video_item_name);
+            teacher = (TextView) itemView.findViewById(R.id.video_item_teacher);
+            isBuy = (TextView) itemView.findViewById(R.id.video_item_isbuy);
+            pic = (ImageView) itemView.findViewById(R.id.video_item_pic);
+        }
     }
 }

@@ -23,10 +23,10 @@ import java.io.IOException;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -48,7 +48,7 @@ import rx.functions.Func1;
  * @date 2017/04/24 16:00:40
  */
 public class MainPresenter implements MainPreInterface {
-    private  VideoAdapter adapter;
+    private VideoAdapter adapter;
     private MainView mainView;
     private String sOrderId;
     private String sVacCode;
@@ -70,9 +70,9 @@ public class MainPresenter implements MainPreInterface {
     }
 
     @Override
-    public void pay() {
+    public void pay(Course course) {
         mainView.showLoading("正在提交订单");
-        initPay();
+        initPay(course);
     }
 
     @Override
@@ -83,11 +83,11 @@ public class MainPresenter implements MainPreInterface {
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
-                if (e==null&&list!=null&&list.size()>0){
-                    ProjectApplication.user=list.get(0);
+                if (e == null && list != null && list.size() > 0) {
+                    ProjectApplication.user = list.get(0);
 
                     mainView.loginSuccess();
-                }else{
+                } else {
                     e.printStackTrace();
                     mainView.loginFail();
                 }
@@ -97,36 +97,26 @@ public class MainPresenter implements MainPreInterface {
 
     /**
      * 条目的点击事件
+     *
      * @param position
      */
     @Override
     public void isBuy(final int position) {
-        boolean isBuy=adapter.isBuy(position);
-        if (isBuy){
+        boolean isBuy = adapter.isBuy(position);
+        if (isBuy) {
             mainView.openPlayer(position);
-        }else{
-            if (ProjectApplication.user==null){
-                //去登陆
-            }else {
+        } else {
+
 //                BuyData buyData=  new BuyData(adapter.getList().get(position).getId(), ProjectApplication.user.getPhone());
 //                buyData.save();
 //                adapter.notifyBuydata();
+                if (ProjectApplication.user.getAccount() >= 100) {
+                    mainView.showGoldDialog(adapter.getList().get(position), 100);
+                } else {
+                    pay(adapter.getList().get(position));
+                }
 
-                BuyData course=   new BuyData();
-                course.setUser(ProjectApplication.user);
-                course.setCourseid(adapter.getCourseId(position));
-                course.save(new SaveListener<String>() {
-                    @Override
-                    public void done(String s, BmobException e) {
-                        if (e==null){
-                            mainView.buySuccess(position);
 
-                        }else{
-                            mainView.showErrorWithStatus("购买失败");
-                        }
-                    }
-                });
-            }
         }
     }
 
@@ -137,25 +127,88 @@ public class MainPresenter implements MainPreInterface {
     @Override
     public void getCourseList() {
         BmobQuery<BuyData> query = new BmobQuery<>();
-        query.addWhereEqualTo("user",ProjectApplication.user.getObjectId());
+        query.addWhereEqualTo("user", ProjectApplication.user.getObjectId());
         query.findObjects(new FindListener<BuyData>() {
             @Override
             public void done(List<BuyData> list, BmobException e) {
-                if (e==null){
+                if (e == null) {
                     LogUtils.i(list.toString());
-                    ProjectApplication.buyList=list;
+                    ProjectApplication.buyList = list;
                     //缓存本地
                     //...
                     adapter.notifyBuydata();
                     mainView.svpDismiss();
-                }else{
+                    mainView.stopFresh(true);
+                } else {
                     mainView.showErrorWithStatus("获取购买信息失败，请刷新列表");
+                    mainView.stopFresh(false);
+                }
+
+            }
+        });
+    }
+
+    /**
+     * 购买成功，添加数据库
+     */
+    @Override
+    public void paySuccess(Course course) {
+        BuyData buyData = new BuyData();
+        buyData.setUser(ProjectApplication.user);
+        buyData.setCourseid(course.getId());
+        buyData.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    mainView.buySuccess();
+
+                } else {
+                    e.printStackTrace();
+                    mainView.showErrorWithStatus("购买失败");
                 }
             }
         });
     }
 
-    private void initPay() {
+    /**
+     * 用金币支付课程
+     *
+     * @param course
+     * @param money
+     */
+    @Override
+    public void buyWithGold(final Course course, int money) {
+        final User user = ProjectApplication.user;
+        Long count = user.getAccount() - money;
+        user.setAccount(count);
+        user.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    //添加购买了的列表
+                    BuyData buyData = new BuyData();
+                    buyData.setCourseid(course.getId());
+                    buyData.setUser(user);
+                    buyData.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String s, BmobException e) {
+                            if (e == null) {
+                                login(user.getPhone());
+                            } else {
+                                e.printStackTrace();
+                                mainView.showErrorWithStatus("支付失败，请重试");
+                            }
+                        }
+                    });
+                } else {
+                    e.printStackTrace();
+                    mainView.showErrorWithStatus("支付失败，请重试");
+                }
+            }
+        });
+    }
+
+    private void initPay(final Course course) {
 
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
@@ -183,7 +236,7 @@ public class MainPresenter implements MainPreInterface {
                             mainView.showToast("获取订单失败，请稍后再试");
                             mainView.svpDismiss();
                         } else {
-                            mainView.payView(sOrderId, sVacCode);
+                            mainView.payView(sOrderId, sVacCode, course);
                         }
                     }
 
@@ -202,6 +255,7 @@ public class MainPresenter implements MainPreInterface {
 
     }
 
+
     public String getCode() throws JSONException, IOException {
 
         String url = "http://mobilepay.wocheng.tv:8090/wochengPay/wosdk/generateOrderId?channelCode=50021" +
@@ -210,7 +264,7 @@ public class MainPresenter implements MainPreInterface {
         json.put("spcode", "1001");
         json.put("appid", "557950046");
         json.put("payid", "55795004601");
-        json.put("mobile", "18686549472");
+        json.put("mobile", ProjectApplication.user.getPhone());
         json.put("price", 100);
         json.put("appname", "一元夺宝");
         json.put("payname", "1001");
@@ -224,10 +278,12 @@ public class MainPresenter implements MainPreInterface {
         System.out.println("getCode::" + ans);
         return ans;
     }
+
     private final String course = "course.json";
+
     public void initUpdata() {
         couseFile = new File(((Activity) mainView).getCacheDir(), course);
-         mainApi = new Retrofit.Builder()
+        mainApi = new Retrofit.Builder()
                 .baseUrl("http://leefeng.me")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -280,6 +336,7 @@ public class MainPresenter implements MainPreInterface {
         }
 
     }
+
     public void upDateCouse() {
         mainView.showLoading("正在更新课程");
         mainApi.getCourse()
@@ -355,7 +412,7 @@ public class MainPresenter implements MainPreInterface {
 
                     @Override
                     public void onNext(List<Course> courses) {
-                        ProjectApplication.cList=courses;
+                        ProjectApplication.cList = courses;
                         adapter.setList(courses);
                         adapter.notifyDataSetChanged();
                     }

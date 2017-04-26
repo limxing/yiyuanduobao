@@ -3,10 +3,10 @@ package com.yuyou.yiyuanduobao;
 import android.content.Intent;
 
 
-import com.orm.SugarApp;
 import com.unicom.shield.UnicomApplicationWrapper;
 import com.yuyou.yiyuanduobao.bean.BuyData;
 import com.yuyou.yiyuanduobao.bean.Course;
+import com.yuyou.yiyuanduobao.bean.PayType;
 import com.yuyou.yiyuanduobao.bean.User;
 import com.yuyou.yiyuanduobao.download.DownLoadService;
 
@@ -24,6 +24,9 @@ public class ProjectApplication extends UnicomApplicationWrapper {
     public static List<Course> cList;
     private static ProjectApplication sugarContext;
     public static List<BuyData> buyList;
+    public static List<PayType> payTypes;
+
+    private boolean isOnline=false;
 
     @Override
     public void onCreate() {

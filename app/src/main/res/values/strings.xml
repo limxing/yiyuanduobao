@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">一元夺宝</string>
+    <string name="company">北京鱼游国际教育科技有限公司</string>
+    <string name="button_allow">允许</string>
 </resources>

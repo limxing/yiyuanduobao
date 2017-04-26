@@ -1,14 +1,14 @@
 package com.yuyou.yiyuanduobao.main;
 
 
-import com.yuyou.yiyuanduobao.bean.User;
+import com.yuyou.yiyuanduobao.bean.Course;
 
 /**
  * @author FengTing
  * @date 2017/04/24 16:00:40
  */
 public interface MainView {
-    void payView(String sOrderId, String sVacCode);
+    void payView(String orderId, String sOrderId, Course sVacCode);
 
     void showToast(String msg);
 
@@ -28,5 +28,9 @@ public interface MainView {
 
     void openPlayer(int position);
 
-    void buySuccess(int position);
+    void buySuccess();
+
+    void stopFresh(boolean b);
+
+    void showGoldDialog(Course course,int money);
 }

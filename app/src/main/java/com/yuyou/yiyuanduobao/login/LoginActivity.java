@@ -1,8 +1,12 @@
 package com.yuyou.yiyuanduobao.login;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -14,6 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.smssdk.SMSSDK;
 import me.leefeng.library.utils.SharedPreferencesUtil;
 import me.leefeng.library.utils.StringUtils;
@@ -34,15 +39,21 @@ public class LoginActivity extends BaseActivity implements LoginView {
     MaterialEditText loginPw;
     @BindView(R.id.login_phone)
     Button loginPhone;
+    @BindView(R.id.title_back)
+    ImageView titleBack;
+    @BindView(R.id.linearLayout2)
+    LinearLayout linearLayout2;
     private LoginPresenter presenter;
     private Timer timer;
     private int time;
     private boolean getPhoneConfirmNumSuccess;
     private String num;
     private TimerTask task;
+    private boolean isBack;
 
     @Override
     protected void initData() {
+        isBack = getIntent().getBooleanExtra("isBack", false);
         presenter = new LoginPresenter(this);
         timer = new Timer();
         task = new TimerTask() {
@@ -77,6 +88,16 @@ public class LoginActivity extends BaseActivity implements LoginView {
     protected void initView() {
         titleName.setText("登录");
         titleTvRight.setVisibility(View.INVISIBLE);
+        if (isBack) {
+            titleBack.setVisibility(View.VISIBLE);
+            titleBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setResult(Activity.RESULT_CANCELED);
+                    finish();
+                }
+            });
+        }
     }
 
     @Override
@@ -95,9 +116,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
      * @param view
      */
     public void login(View view) {
-        //ces
-        num="18514528236";
-        presenter.getUserInfo(num);
+        //测试，直接登录
+//        num="18514528236";
+//        presenter.getUserInfo(num);
 
         if (StringUtils.isEmpty(num)) {
             ToastUtils.showShort(mContext, "请输入手机号");
@@ -111,10 +132,12 @@ public class LoginActivity extends BaseActivity implements LoginView {
         if (StringUtils.isEmpty(confirmNUm)) {
             ToastUtils.showShort(mContext, "请输入验证码");
             return;
+        }else{
+            SMSSDK.submitVerificationCode("86", num, confirmNUm);
         }
         closeInput();
         svp.showLoading("正在登录");
-//        SMSSDK.submitVerificationCode("86", num, confirmNUm);
+
     }
 
     /**
@@ -184,11 +207,16 @@ public class LoginActivity extends BaseActivity implements LoginView {
             @Override
             public void run() {
                 SharedPreferencesUtil.saveStringData(mContext, "phone", num);
-                Intent intent = new Intent(mContext, MainActivity.class);
-                startActivity(intent);
+                if (isBack) {
+                    setResult(RESULT_OK);
+                } else {
+                    Intent intent = new Intent(mContext, MainActivity.class);
+                    startActivity(intent);
+                }
                 finish();
             }
         });
     }
+
 
 }
