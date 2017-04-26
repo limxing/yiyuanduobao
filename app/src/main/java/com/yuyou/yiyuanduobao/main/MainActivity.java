@@ -122,7 +122,7 @@ public class MainActivity extends BaseActivity implements MainView, AdapterView.
 
     @Override
     public void loginSuccess() {
-        svp.dismiss();
+//        svp.dismiss();
         initUser();
     }
 
@@ -149,6 +149,15 @@ public class MainActivity extends BaseActivity implements MainView, AdapterView.
         startActivity(intent);
     }
 
+    /**
+     * 购买成功
+     * @param position
+     */
+    @Override
+    public void buySuccess(int position) {
+        initUser();
+    }
+
     private void initUser() {
 
         Long account = ProjectApplication.user.getAccount();
@@ -157,7 +166,8 @@ public class MainActivity extends BaseActivity implements MainView, AdapterView.
         } else {
             titleTvRight.setText(account.intValue() + "");
         }
-
+        svp.showLoading("正在获取购买信息");
+        presenter.getCourseList();
     }
 
 

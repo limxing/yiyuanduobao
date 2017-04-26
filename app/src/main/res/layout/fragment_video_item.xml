@@ -58,7 +58,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/imageView"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:textColor="@color/colorAccent"
             android:text="已购买" />
     </RelativeLayout>

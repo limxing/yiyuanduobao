@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 
 import com.alibaba.fastjson.JSON;
 import com.yuyou.yiyuanduobao.ProjectApplication;
+import com.yuyou.yiyuanduobao.bean.BuyData;
 import com.yuyou.yiyuanduobao.bean.Course;
 import com.yuyou.yiyuanduobao.bean.User;
 import com.yuyou.yiyuanduobao.bean.Version;
@@ -22,8 +23,10 @@ import java.io.IOException;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -82,6 +85,7 @@ public class MainPresenter implements MainPreInterface {
             public void done(List<User> list, BmobException e) {
                 if (e==null&&list!=null&&list.size()>0){
                     ProjectApplication.user=list.get(0);
+
                     mainView.loginSuccess();
                 }else{
                     e.printStackTrace();
@@ -96,7 +100,7 @@ public class MainPresenter implements MainPreInterface {
      * @param position
      */
     @Override
-    public void isBuy(int position) {
+    public void isBuy(final int position) {
         boolean isBuy=adapter.isBuy(position);
         if (isBuy){
             mainView.openPlayer(position);
@@ -107,8 +111,48 @@ public class MainPresenter implements MainPreInterface {
 //                BuyData buyData=  new BuyData(adapter.getList().get(position).getId(), ProjectApplication.user.getPhone());
 //                buyData.save();
 //                adapter.notifyBuydata();
+
+                BuyData course=   new BuyData();
+                course.setUser(ProjectApplication.user);
+                course.setCourseid(adapter.getCourseId(position));
+                course.save(new SaveListener<String>() {
+                    @Override
+                    public void done(String s, BmobException e) {
+                        if (e==null){
+                            mainView.buySuccess(position);
+
+                        }else{
+                            mainView.showErrorWithStatus("购买失败");
+                        }
+                    }
+                });
             }
         }
+    }
+
+
+    /**
+     * 登陆成功后，查询已购买列表
+     */
+    @Override
+    public void getCourseList() {
+        BmobQuery<BuyData> query = new BmobQuery<>();
+        query.addWhereEqualTo("user",ProjectApplication.user.getObjectId());
+        query.findObjects(new FindListener<BuyData>() {
+            @Override
+            public void done(List<BuyData> list, BmobException e) {
+                if (e==null){
+                    LogUtils.i(list.toString());
+                    ProjectApplication.buyList=list;
+                    //缓存本地
+                    //...
+                    adapter.notifyBuydata();
+                    mainView.svpDismiss();
+                }else{
+                    mainView.showErrorWithStatus("获取购买信息失败，请刷新列表");
+                }
+            }
+        });
     }
 
     private void initPay() {

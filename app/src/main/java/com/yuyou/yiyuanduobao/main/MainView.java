@@ -27,4 +27,6 @@ public interface MainView {
     void setAdapter(VideoAdapter adapter);
 
     void openPlayer(int position);
+
+    void buySuccess(int position);
 }

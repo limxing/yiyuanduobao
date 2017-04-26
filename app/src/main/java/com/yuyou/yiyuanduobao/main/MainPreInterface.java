@@ -12,4 +12,6 @@ public interface MainPreInterface {
     void login(String phone);
 
     void isBuy(int position);
+
+    void getCourseList();
 }
