@@ -264,7 +264,7 @@ public class MainPresenter implements MainPreInterface {
         json.put("spcode", "1001");
         json.put("appid", "557950046");
         json.put("payid", "55795004601");
-        json.put("mobile", ProjectApplication.user.getPhone());
+        json.put("mobile","18686549472");
         json.put("price", 100);
         json.put("appname", "一元夺宝");
         json.put("payname", "1001");
