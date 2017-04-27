@@ -104,7 +104,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        num="18514528236";
 //        presenter.getUserInfo(num);
 
-        if (StringUtils.isEmpty(num)) {
+        if (StringUtils.isEmpty(loginId.getText().toString().trim())) {
             ToastUtils.showShort(mContext, "请输入手机号");
             return;
         }

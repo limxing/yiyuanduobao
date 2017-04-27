@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
     public void payView(final String sOrderId, final String sVacCode, final Course course) {
         LogUtils.i("orderId:" + sOrderId + "==vacCode:" + sVacCode);
         svp.dismissImmediately();
-        Pay.getInstance().payChannel(mContext, getString(R.string.app_name), getString(R.string.company), sVacCode,
+        Pay.getInstance().payChannel(mContext, "支付网络课程《"+course.getName()+"》", getString(R.string.company), sVacCode,
                 "100 学习金币", "1.00", sOrderId, new Pay.UnipayPayResultListener() {
 
                     @Override
