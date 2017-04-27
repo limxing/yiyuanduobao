@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 
 
+import com.tencent.bugly.crashreport.CrashReport;
 import com.unicom.shield.UnicomApplicationWrapper;
 import com.unicom.shield.unipay;
 import com.yuyou.yiyuanduobao.bean.BuyData;
@@ -33,7 +34,7 @@ public class ProjectApplication extends UnicomApplicationWrapper {
 
     public static ProjectApplication application;
 
-    private boolean isOnline = false;
+    private boolean isDebug = false;
     public static Context attachContext;
 
     @Override
@@ -42,13 +43,16 @@ public class ProjectApplication extends UnicomApplicationWrapper {
         LogUtils.i("Application===onCreat");
 
 //        mApplication.onCreate();
-//        application=this;
+        application=this;
         startService(new Intent(this, DownLoadService.class));
         //后端云
         Bmob.initialize(this, "b8f0593656c47a6539e7f7253ecf4d37");
         //短信验证码
         SMSSDK.initSDK(this, "1d50a38c893be", "3c3903461ca3c72aa8e8e9d01c42489c");//一元夺宝的
 //        SMSSDK.initSDK(this, "189b617b10eb4", "bbdaa1208d663cbc3b8b4f628ef39fd8");//北大的
+
+        CrashReport.initCrashReport(getApplicationContext(), "15da576048", isDebug);
+//        if (isDebug)
     }
 
     @Override

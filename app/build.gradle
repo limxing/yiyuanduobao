@@ -13,12 +13,17 @@ android {
         versionName "1.0"
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-        splits {
-            abi {
-                enable true
-                reset()
-                include 'x86', 'armeabi'
-            }
+        //分开打包
+//        splits {
+//            abi {
+//                enable true
+//                reset()
+//                include 'x86', 'armeabi'
+//            }
+//        }
+//需要生成什么文件的so
+        ndk {
+            abiFilters 'armeabi', 'x86'//, 'armeabi-v7a', 'x86_64', 'arm64-v8a', mips, mips64...加入需要生成的文件夹
         }
 
         buildTypes {
@@ -75,6 +80,7 @@ dependencies {
     compile('com.squareup.retrofit2:retrofit:2.2.0') { exclude group: 'com.squareup.okhttp3' }
     compile('com.squareup.retrofit2:converter-gson:2.2.0') {
         exclude group: 'com.google.code.gson'
+        exclude group: 'com.squareup.okhttp3'
     }
     compile('com.squareup.retrofit2:adapter-rxjava:2.2.0') {
         exclude group: 'io.reactivex'
@@ -92,4 +98,7 @@ dependencies {
 //    compile project(':lfrecyclerview')
     compile 'pub.devrel:easypermissions:0.4.0'
 
+
+    compile 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
+    compile 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
 }

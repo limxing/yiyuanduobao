@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
         LogUtils.i("orderId:" + sOrderId + "==vacCode:" + sVacCode);
         svp.dismissImmediately();
         Pay.getInstance().payChannel(mContext, getString(R.string.app_name), getString(R.string.company), sVacCode,
-                "1元", "1.00", sOrderId, new Pay.UnipayPayResultListener() {
+                "100 学习金币", "1.00", sOrderId, new Pay.UnipayPayResultListener() {
 
                     @Override
                     public void PayResult(String arg0, int arg1, int arg2, String arg3) {

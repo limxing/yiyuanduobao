@@ -108,7 +108,7 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
     @Override
     public void payView(String sOrderId, String sVacCode, final PayType payType) {
         svp.dismissImmediately();
-        String s1 = payType.getPrice() / 100 + "元";
+        String s1 = payType.getPrice() + " 学习金币";
         String s2 = payType.getPrice() / 100 + ".00";
         Pay.getInstance().payChannel(mContext, getString(R.string.app_name), getString(R.string.company), sVacCode,
                 s1, s2, sOrderId, new Pay.UnipayPayResultListener() {

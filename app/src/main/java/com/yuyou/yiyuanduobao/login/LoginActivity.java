@@ -133,6 +133,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         num = loginId.getText().toString().trim();
         String telRegex = "[1][34578]\\d{9}";
         if (num.length() == 11 && num.matches(telRegex)) {
+            closeInput();
             svp.showLoading("正在获取验证码");
             presenter.getPhoneConfirmNum(num);
         } else {

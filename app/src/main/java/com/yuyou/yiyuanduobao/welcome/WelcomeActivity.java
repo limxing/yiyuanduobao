@@ -26,6 +26,7 @@ import butterknife.BindView;
 
 import me.leefeng.library.utils.SharedPreferencesUtil;
 import me.leefeng.library.utils.StringUtils;
+import me.leefeng.library.utils.ToastUtils;
 import pub.devrel.easypermissions.EasyPermissions;
 //import pub.devrel.easypermissions.EasyPermissions;
 
@@ -56,7 +57,8 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView ,EasyPe
                     public void superPermission() {
                 permission();
                     }
-                }, "需要权限处理", Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE);
+                }, "需要权限处理", Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_PHONE_STATE,Manifest.permission.SEND_SMS);
 
             }
         }, 3000);
@@ -150,15 +152,16 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView ,EasyPe
     public void onPermissionsGranted(int requestCode, List<String> perms) {
         if (mListener != null) {
             mListener.superPermission();//同意了全部权限的回调
-//            ProjectApplication.mApplication=null;
-//            initUnipay();
-            finish();
-            Intent intent = getBaseContext().getPackageManager()
-                    .getLaunchIntentForPackage(getBaseContext().getPackageName());
-            PendingIntent restartIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-            AlarmManager mgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 10, restartIntent); // 1秒钟后重启应用
-            System.exit(0);
+            ProjectApplication.mApplication=null;
+            initUnipay();
+//            finish();
+//            ToastUtils.showLong(mContext,"正在初始化");
+//            Intent intent = getBaseContext().getPackageManager()
+//                    .getLaunchIntentForPackage(getBaseContext().getPackageName());
+//            PendingIntent restartIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//            AlarmManager mgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+//            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 10, restartIntent); // 1秒钟后重启应用
+//            System.exit(0);
         }
     }
 
