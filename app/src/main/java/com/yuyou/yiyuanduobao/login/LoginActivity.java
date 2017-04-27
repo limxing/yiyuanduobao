@@ -3,6 +3,7 @@ package com.yuyou.yiyuanduobao.login;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -44,35 +45,17 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @BindView(R.id.linearLayout2)
     LinearLayout linearLayout2;
     private LoginPresenter presenter;
-    private Timer timer;
-    private int time;
+    private TimeCount timer;
     private boolean getPhoneConfirmNumSuccess;
     private String num;
-    private TimerTask task;
     private boolean isBack;
 
     @Override
     protected void initData() {
         isBack = getIntent().getBooleanExtra("isBack", false);
         presenter = new LoginPresenter(this);
-        timer = new Timer();
-        task = new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loginPhone.setText(time + "(s)");
-                        time--;
-                        if (time == 0) {
-                            loginPhone.setEnabled(true);
-                            loginPhone.setText("获取验证码");
-//                            task.cancel();
-                        }
-                    }
-                });
-            }
-        };
+        timer =new TimeCount(60000, 1000);
+
     }
 
     @Override
@@ -87,6 +70,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @Override
     protected void initView() {
         titleName.setText("登录");
+        titleBack.setVisibility(View.GONE);
         titleTvRight.setVisibility(View.INVISIBLE);
         if (isBack) {
             titleBack.setVisibility(View.VISIBLE);
@@ -163,10 +147,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
             public void run() {
                 svp.showInfoWithStatus(msg);
                 getPhoneConfirmNumSuccess = true;
-                time = 60;
-                loginPhone.setEnabled(false);
-                timer.schedule(task, 100, 1000);
-
+                timer.start();
             }
         });
     }
@@ -218,5 +199,23 @@ public class LoginActivity extends BaseActivity implements LoginView {
         });
     }
 
+    class TimeCount extends CountDownTimer {
 
+        public TimeCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            loginPhone.setEnabled(false);
+            loginPhone.setText(millisUntilFinished / 1000 + "(s)");
+        }
+
+        @Override
+        public void onFinish() {
+            loginPhone.setText("获取验证码");
+            loginPhone.setEnabled(true);
+
+        }
+    }
 }

@@ -298,7 +298,7 @@ public class NewPlayerActivity extends BaseActivity implements View.OnClickListe
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
 //            SwipeBackHelper.getCurrentPage(this).setSwipeBackEnable(true);
-            fab.setVisibility(View.VISIBLE);
+            fab.setVisibility(View.GONE);
             newplayer_recycleview.setVisibility(View.VISIBLE);
         } else {
 //            SwipeBackHelper.getCurrentPage(this).setSwipeBackEnable(false);

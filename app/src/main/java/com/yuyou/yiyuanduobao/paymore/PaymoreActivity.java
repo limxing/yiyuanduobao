@@ -58,7 +58,11 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
     protected void initView() {
         titleTvRight.setVisibility(View.GONE);
         titleName.setText("充值中心");
-        paymoreAccount.setText(ProjectApplication.user.getAccount() + "");
+        if (ProjectApplication.user.getAccount() == null) {
+            paymoreAccount.setText(0 + "");
+        } else {
+            paymoreAccount.setText(ProjectApplication.user.getAccount() + "");
+        }
         paymoreList.setLayoutManager(new GridLayoutManager(mContext, 3));
 //        paymoreList.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL,5,R.color.transparent));
 //        paymoreList.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.HORIZONTAL,5,R.color.transparent));
@@ -104,10 +108,10 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
     @Override
     public void payView(String sOrderId, String sVacCode, final PayType payType) {
         svp.dismissImmediately();
-        String s1= payType.getPrice() / 100+"元";
-        String s2=payType.getPrice() / 100 + ".00";
+        String s1 = payType.getPrice() / 100 + "元";
+        String s2 = payType.getPrice() / 100 + ".00";
         Pay.getInstance().payChannel(mContext, getString(R.string.app_name), getString(R.string.company), sVacCode,
-               s1,s2 , sOrderId, new Pay.UnipayPayResultListener() {
+                s1, s2, sOrderId, new Pay.UnipayPayResultListener() {
 
                     @Override
                     public void PayResult(String arg0, int arg1, int arg2, String arg3) {
@@ -116,7 +120,7 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
                             Toast.makeText(mContext, "支付请求已提交", Toast.LENGTH_LONG).show();
                             presenter.paySuccess(payType);
                         } else if (arg1 == 2) {
-                            if (arg2==2){
+                            if (arg2 == 2) {
 //                                Toast.makeText(mContext, arg3+"，请重试", Toast.LENGTH_LONG).show();
                                 new AlertDialog.Builder(mContext).setTitle("首次使用支付系统")
                                         .setMessage("请点击确定后，重新打开APP")
@@ -128,7 +132,7 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
                                         })
                                         .show();
 
-                            }else {
+                            } else {
                                 presenter.paySuccess(payType);
                                 Toast.makeText(mContext, "支付成功", Toast.LENGTH_LONG).show();
                             }

@@ -3,54 +3,63 @@ apply plugin: 'com.neenbedankt.android-apt'//butterknife增加这一句增加这
 apply plugin: 'org.greenrobot.greendao' // apply plugin
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 24
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.yuyou.yiyuanduobao"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        splits {
+            abi {
+                enable true
+                reset()
+                include 'x86', 'armeabi'
+            }
         }
-    }
-    useLibrary 'org.apache.http.legacy'
-    packagingOptions {
-        exclude 'LICENSE.txt'
-        exclude 'META-INF/rxjava.properties'
-        // ... and any other excludes Go here
-    }
-    greendao{
-        schemaVersion 1
-        daoPackage 'com.yuyou.yiyuanduobao'
-        targetGenDir 'src/main/java'
+
+        buildTypes {
+            release {
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
+        }
+//    useLibrary 'org.apache.http.legacy'
+        packagingOptions {
+            exclude 'LICENSE.txt'
+            exclude 'META-INF/rxjava.properties'
+            // ... and any other excludes Go here
+        }
+//    greendao {
+//        schemaVersion 1
+//        daoPackage 'com.yuyou.yiyuanduobao'
+//        targetGenDir 'src/main/java'
+//    }
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
-    testCompile 'junit:junit:4.12'
-    compile 'me.leefeng:library:3.0.1'
+//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    })
+    compile 'com.android.support:appcompat-v7:24.0.0'
+//    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+//    testCompile 'junit:junit:4.12'
+        compile 'me.leefeng:library:3.0.1'
     compile 'me.leefeng:lfrecyclerview:1.0.4'
+    compile 'me.leefeng:player:1.6.1'
     //    butterknife
     compile 'com.jakewharton:butterknife:8.4.0'
     //    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     //添加这一句
     //    permissionsdispatcher
-//    compile 'com.github.hotchemi:permissionsdispatcher:2.3.2'
-//    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.2'
+    //    compile 'com.github.hotchemi:permissionsdispatcher:2.3.2'
+    //    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.2'
     //RxAndroid
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.0.9'
@@ -62,27 +71,25 @@ dependencies {
     //EditeText
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile files('libs/fastjson-1.2.20.jar')
-//retrofit
-    compile ('com.squareup.retrofit2:retrofit:2.2.0')
-    { exclude group: 'com.squareup.okhttp3' }
-    compile ('com.squareup.retrofit2:converter-gson:2.2.0')
-    {exclude group: 'com.google.code.gson'}
-
-    compile ('com.squareup.retrofit2:adapter-rxjava:2.2.0')
-            { exclude group: 'io.reactivex'
-                exclude group: 'com.squareup.okhttp3' }
-
+    //retrofit
+    compile('com.squareup.retrofit2:retrofit:2.2.0') { exclude group: 'com.squareup.okhttp3' }
+    compile('com.squareup.retrofit2:converter-gson:2.2.0') {
+        exclude group: 'com.google.code.gson'
+    }
+    compile('com.squareup.retrofit2:adapter-rxjava:2.2.0') {
+        exclude group: 'io.reactivex'
+        exclude group: 'com.squareup.okhttp3'
+    }
     //图片加载
     compile 'com.github.bumptech.glide:glide:3.7.0'
-//、、cardview
-    compile 'com.android.support:cardview-v7:25.0.0'
-
     //带指示器的recycleView
     compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
-    compile 'me.leefeng:player:1.6.1'
-//greenDao
-//    compile 'org.greenrobot:greendao:3.2.0' // add library
 
-//    compile 'com.github.satyan:sugar:1.3'
+    //greenDao
+    //    compile 'org.greenrobot:greendao:3.2.0' // add library
+    //    compile 'com.github.satyan:sugar:1.3'
+//    compile project(':library')
+//    compile project(':lfrecyclerview')
+    compile 'pub.devrel:easypermissions:0.4.0'
 
 }
