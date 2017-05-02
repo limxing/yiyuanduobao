@@ -20,7 +20,7 @@ import me.leefeng.library.utils.LogUtils;
  */
 public class LoginPresenter implements LoginPreInterface {
     private LoginView loginView;
-    private String phone="18514528236";
+    private String phone="";
 
     public LoginPresenter(LoginView loginView) {
         this.loginView = loginView;
@@ -71,10 +71,11 @@ public class LoginPresenter implements LoginPreInterface {
 
     public void getUserInfo(String num) {
         BmobQuery<User> query = new BmobQuery<>();
-        query.addWhereEqualTo("phone", phone);
+        query.addWhereEqualTo("phone", num);
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(final List<User> list, BmobException e) {
+                if (loginView==null) return;
                 if (e==null) {
                     if (list != null && list.size() > 0) {
                         ProjectApplication.user = list.get(0);

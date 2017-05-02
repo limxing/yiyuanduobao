@@ -101,7 +101,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
      */
     public void login(View view) {
         //测试，直接登录
-//        num="18514528236";
+//        num="17600189887";
 //        presenter.getUserInfo(num);
 
         if (StringUtils.isEmpty(loginId.getText().toString().trim())) {

@@ -71,7 +71,7 @@ public class PaymorePresenter implements PaymorePreInterface {
         adapter.setListener(new ItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                LogUtils.i("PayMore:"+position);
+                LogUtils.i("PayMore:" + position);
                 PayType payType = ProjectApplication.payTypes.get(position);
                 paymoreView.showLoading("正在提交订单..");
                 initPay(payType);
@@ -90,8 +90,13 @@ public class PaymorePresenter implements PaymorePreInterface {
     public void paySuccess(final PayType payType) {
         paymoreView.showLoading("正在支付");
         final User user = ProjectApplication.user;
-        final Long account = user.getAccount();
-        user.setAccount(account+payType.getPrice());
+        Long count = 0l;
+        if (user.getAccount() != null) {
+            count = user.getAccount();
+        }
+        final Long account = count;
+
+        user.setAccount(account + payType.getPrice());
         user.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -155,7 +160,7 @@ public class PaymorePresenter implements PaymorePreInterface {
     }
 
     public String getCode(PayType payType) throws JSONException, IOException {
-LogUtils.i("getCode:"+payType.getPayid()+"=price="+payType.getPrice());
+        LogUtils.i("getCode:" + payType.getPayid() + "=price=" + payType.getPrice());
         String url = "http://mobilepay.wocheng.tv:8090/wochengPay/wosdk/generateOrderId?channelCode=50021" +
                 "&protocolVersion=1001";
         JSONObject json = new JSONObject();

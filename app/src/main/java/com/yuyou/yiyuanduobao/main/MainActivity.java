@@ -1,6 +1,9 @@
 package com.yuyou.yiyuanduobao.main;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -78,6 +81,7 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
         super.onDestroy();
         presenter.destory();
         presenter = null;
+        ProjectApplication.user=null;
     }
 
     @Override
@@ -98,22 +102,29 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
 
     @Override
     protected void doReceive(Intent action) {
-
+        if (action.getAction().equals("com.yuyou.account")) {
+            Long account = ProjectApplication.user.getAccount();
+            if (account == null) {
+                titleTvRight.setText(0 + "");
+            } else {
+                titleTvRight.setText(account.intValue() + "");
+            }
+        }
     }
 
 
-    @OnClick(R.id.main_bt)
-    public void onViewClicked() {
-        Course course = new Course();
-        course.setName("C语言设计");
-        presenter.pay(course);
-    }
+//    @OnClick(R.id.main_bt)
+//    public void onViewClicked() {
+//        Course course = new Course();
+//        course.setName("C语言设计");
+//        presenter.pay(course);
+//    }
 
     @Override
     public void payView(final String sOrderId, final String sVacCode, final Course course) {
         LogUtils.i("orderId:" + sOrderId + "==vacCode:" + sVacCode);
         svp.dismissImmediately();
-        Pay.getInstance().payChannel(mContext, "支付网络课程《"+course.getName()+"》", getString(R.string.company), sVacCode,
+        Pay.getInstance().payChannel(mContext, "支付网络课程《" + course.getName() + "》", getString(R.string.company), sVacCode,
                 "100 学习金币", "1.00", sOrderId, new Pay.UnipayPayResultListener() {
 
                     @Override
@@ -123,17 +134,23 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
                             Toast.makeText(mContext, "支付请求已提交", Toast.LENGTH_LONG).show();
                             presenter.paySuccess(course);
                         } else if (arg1 == 2) {
-                            if (arg2==2){
+                            if (arg2 == 2) {
                                 new AlertDialog.Builder(mContext).setTitle("支付环境不安全")
+                                        .setCancelable(false)
                                         .setMessage("请点击确定后，重新打开APP")
                                         .setNegativeButton("确定", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
+                                                Intent intent = getBaseContext().getPackageManager()
+                                                        .getLaunchIntentForPackage(getBaseContext().getPackageName());
+                                                PendingIntent restartIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+                                                AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                                                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 10, restartIntent); // 1秒钟后重启应用
                                                 System.exit(0);
                                             }
                                         })
                                         .show();
-                            }else {
+                            } else {
                                 presenter.paySuccess(course);
                                 Toast.makeText(mContext, "支付成功", Toast.LENGTH_LONG).show();
                             }
@@ -223,16 +240,28 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
 
     @Override
     public void showGoldDialog(final Course course, final int money) {
-        new AlertView("", "您将消费1" + money + "金币购买" + course.getName(), "取消", new String[]{"确定"}, null, mContext, AlertView.Style.Alert,
-                new me.leefeng.publicc.alertview.OnItemClickListener() {
+//        new AlertView("", "您将消费" + money + "金币购买" + course.getName(), "取消", new String[]{"确定"}, null, mContext, AlertView.Style.Alert,
+//                new me.leefeng.publicc.alertview.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(Object o, int position) {
+//                        if (position == 0) {
+//                            svp.showLoading("正在支付");
+//                            presenter.buyWithGold(course, money);
+//                        }
+//                    }
+//                }).show();
+
+        new AlertDialog.Builder(mContext).setTitle("金币购买").setMessage( "您将消费" + money + "金币购买" + course.getName())
+                .setNegativeButton("取消",null)
+                .setIcon(R.mipmap.ic_launcher)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onItemClick(Object o, int position) {
-                        if (position == 0) {
-                            svp.showLoading("正在支付");
-                            presenter.buyWithGold(course, money);
-                        }
+                    public void onClick(DialogInterface dialog, int which) {
+                        svp.showLoading("正在支付");
+                        presenter.buyWithGold(course, money);
                     }
-                }).show();
+                })
+                .show();
     }
 
     private void initUser() {
@@ -343,4 +372,16 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
     }
 
 
+    private long exitTime = 0;
+    @Override
+    public void onBackPressed() {
+        if((System.currentTimeMillis()-exitTime) > 2000){
+            Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
+            System.exit(0);
+        }
+
+    }
 }

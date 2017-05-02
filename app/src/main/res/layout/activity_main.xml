@@ -25,6 +25,7 @@
                 android:layout_height="match_parent"></ListView>-->
         <me.leefeng.lfrecyclerview.LFRecyclerView
             android:id="@+id/mian_list"
+            android:overScrollMode="never"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#fff"></me.leefeng.lfrecyclerview.LFRecyclerView>

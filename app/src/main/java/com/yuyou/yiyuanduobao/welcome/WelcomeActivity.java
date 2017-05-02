@@ -24,6 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
+import me.leefeng.library.utils.LogUtils;
 import me.leefeng.library.utils.SharedPreferencesUtil;
 import me.leefeng.library.utils.StringUtils;
 import me.leefeng.library.utils.ToastUtils;
@@ -153,6 +154,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView ,EasyPe
         if (mListener != null) {
             mListener.superPermission();//同意了全部权限的回调
             ProjectApplication.mApplication=null;
+            LogUtils.i("onPermissionsGranted");
             initUnipay();
 //            finish();
 //            ToastUtils.showLong(mContext,"正在初始化");
@@ -185,7 +187,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView ,EasyPe
             } catch (Exception var5) {
                 var5.printStackTrace();
             }
-
+            ProjectApplication.mApplication.onCreate();
         }
     }
 

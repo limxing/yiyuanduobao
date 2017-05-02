@@ -82,7 +82,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void registBrodcast() {
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.siweidg.finish");
+        intentFilter.addAction("com.yuyou.account");
         registerReceiver(broadcastReceiver, intentFilter);
     }
 }

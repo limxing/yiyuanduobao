@@ -148,6 +148,8 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
     public void paySuccess() {
         svp.showSuccessWithStatus("充值成功");
         paymoreAccount.setText(ProjectApplication.user.getAccount() + "");
+        Intent intent=new Intent("com.yuyou.account");
+        sendBroadcast(intent);
     }
 
     @Override
