@@ -34,12 +34,13 @@ public class ProjectApplication extends UnicomApplicationWrapper {
 
     public static ProjectApplication application;
 
-    private boolean isDebug = false;
+    public static boolean isDebug = false;
     public static Context attachContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        LogUtils.isOnline(!isDebug);
         LogUtils.i("Application===onCreat");
 
 //        mApplication.onCreate();

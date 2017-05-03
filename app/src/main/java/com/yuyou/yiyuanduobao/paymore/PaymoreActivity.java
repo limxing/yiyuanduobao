@@ -116,6 +116,7 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
                     @Override
                     public void PayResult(String arg0, int arg1, int arg2, String arg3) {
                         LogUtils.i("联通返回结果：" + arg0 + "==" + arg1 + "==" + arg2 + "==" + arg3);
+                        closeInput();
                         if (arg1 == 1) {
                             Toast.makeText(mContext, "支付请求已提交", Toast.LENGTH_LONG).show();
                             presenter.paySuccess(payType);

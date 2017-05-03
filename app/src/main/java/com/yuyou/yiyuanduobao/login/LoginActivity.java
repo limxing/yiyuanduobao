@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.yuyou.yiyuanduobao.BaseActivity;
+import com.yuyou.yiyuanduobao.ProjectApplication;
 import com.yuyou.yiyuanduobao.R;
 import com.yuyou.yiyuanduobao.main.MainActivity;
 
@@ -54,7 +55,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     protected void initData() {
         isBack = getIntent().getBooleanExtra("isBack", false);
         presenter = new LoginPresenter(this);
-        timer =new TimeCount(60000, 1000);
+        timer = new TimeCount(60000, 1000);
 
     }
 
@@ -100,9 +101,11 @@ public class LoginActivity extends BaseActivity implements LoginView {
      * @param view
      */
     public void login(View view) {
-        //测试，直接登录
-//        num="17600189887";
-//        presenter.getUserInfo(num);
+        //测试，直接登录\
+        if (ProjectApplication.isDebug) {
+            num = "17600189887";
+            presenter.getUserInfo(num);
+        }
 
         if (StringUtils.isEmpty(loginId.getText().toString().trim())) {
             ToastUtils.showShort(mContext, "请输入手机号");
@@ -116,7 +119,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         if (StringUtils.isEmpty(confirmNUm)) {
             ToastUtils.showShort(mContext, "请输入验证码");
             return;
-        }else{
+        } else {
             SMSSDK.submitVerificationCode("86", num, confirmNUm);
         }
         closeInput();

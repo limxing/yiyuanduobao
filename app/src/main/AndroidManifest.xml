@@ -29,7 +29,12 @@
         <activity android:name=".main.MainActivity">
 
         </activity>
-        <service android:name="com.unicom.wostore.unipay.paysecurity.SecurityServiceFramework" />
+        <service android:name="com.unicom.wostore.unipay.paysecurity.SecurityServiceFramework" >
+            <!--<intent-filter>-->
+                <!--<action android:name="com.yuyou.yiyuanduobao.unicom.wostore.unipay.securityserviceframework" />-->
+            <!--</intent-filter>-->
+
+        </service>
         <activity
             android:name="com.unicom.wostore.unipay.paysecurity.SecurityActivity"
             android:configChanges="screenSize|orientation"

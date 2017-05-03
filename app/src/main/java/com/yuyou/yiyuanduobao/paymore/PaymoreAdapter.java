@@ -35,7 +35,7 @@ public class PaymoreAdapter extends RecyclerView.Adapter<PaymoreAdapter.ItemView
     public void onBindViewHolder(ItemView holder, final int position) {
         PayType payType = list.get(position);
         holder.name.setText(payType.getName());
-        holder.price.setText("￥ " + payType.getPrice()/100 + ".00元");
+        holder.price.setText("¥ " + payType.getPrice()/100 + ".00元");
         holder.rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

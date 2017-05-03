@@ -1,11 +1,10 @@
 package com.yuyou.yiyuanduobao.welcome;
 
 import android.Manifest;
-import android.app.AlarmManager;
 import android.app.Application;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,21 +26,20 @@ import butterknife.BindView;
 import me.leefeng.library.utils.LogUtils;
 import me.leefeng.library.utils.SharedPreferencesUtil;
 import me.leefeng.library.utils.StringUtils;
-import me.leefeng.library.utils.ToastUtils;
 import pub.devrel.easypermissions.EasyPermissions;
-//import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * @author FengTing
  * @@date 2017/04/25 10:39:52
  */
 
-public class WelcomeActivity extends BaseActivity implements WelcomeView ,EasyPermissions.PermissionCallbacks{
+public class WelcomeActivity extends BaseActivity implements WelcomeView, EasyPermissions.PermissionCallbacks {
     private static final int RC_PERM = 10000;
     @BindView(R.id.welcome_bottom)
     TextView welcomeBottom;
     @BindView(R.id.welcome_splash)
     ImageView mainSplash;
+
     private WelcomePresenter presenter;
     private String phone;
 
@@ -54,12 +52,12 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView ,EasyPe
             @Override
             public void run() {
                 checkPermission(new CheckPermListener() {
-                    @Override
-                    public void superPermission() {
-                permission();
-                    }
-                }, "需要权限处理", Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_PHONE_STATE,Manifest.permission.SEND_SMS);
+                                    @Override
+                                    public void superPermission() {
+                                        permission();
+                                    }
+                                }, "需要权限处理", Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_PHONE_STATE, Manifest.permission.SEND_SMS);
 
             }
         }, 3000);
@@ -108,7 +106,16 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView ,EasyPe
 
     @Override
     protected void initView() {
-
+//        mCountdownView.setText("计时");
+//        mCountdownView.setTime(5000);
+//        mCountdownView.star();
+//
+//        mCountdownView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                permission();
+//            }
+//        });
     }
 
     @Override
@@ -144,16 +151,18 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView ,EasyPe
                     RC_PERM, mPerms);
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
+
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
         if (mListener != null) {
             mListener.superPermission();//同意了全部权限的回调
-            ProjectApplication.mApplication=null;
+            ProjectApplication.mApplication = null;
             LogUtils.i("onPermissionsGranted");
             initUnipay();
 //            finish();
@@ -172,7 +181,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView ,EasyPe
         finish();
     }
 
-//
+    //
     public static String mApplicationName = "com.unicom.xiaowo.inner.UnicomApplication";
 
     public void loadApplication(Context var1) {
@@ -197,4 +206,6 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView ,EasyPe
             this.loadApplication(ProjectApplication.attachContext);
         }
     }
+
+
 }
