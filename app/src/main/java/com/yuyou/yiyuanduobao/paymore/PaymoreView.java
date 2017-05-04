@@ -23,4 +23,6 @@ public interface PaymoreView {
     void paySuccess();
 
     void payFail();
+
+    void getListFail();
 }

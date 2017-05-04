@@ -34,7 +34,7 @@ public class ProjectApplication extends UnicomApplicationWrapper {
 
     public static ProjectApplication application;
 
-    public static boolean isDebug = false;
+    public static boolean isDebug = true;
     public static Context attachContext;
 
     @Override

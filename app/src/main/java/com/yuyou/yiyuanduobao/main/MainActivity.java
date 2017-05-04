@@ -365,6 +365,11 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_tv_right:
+                if (ProjectApplication.user==null){
+                    ToastUtils.showLong(mContext, "请先登录");
+                    goLogin();
+                    return;
+                }
                 Intent intent = new Intent(mContext, PaymoreActivity.class);
                 startActivity(intent);
                 break;

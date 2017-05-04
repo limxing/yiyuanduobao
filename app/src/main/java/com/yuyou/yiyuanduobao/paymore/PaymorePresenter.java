@@ -53,6 +53,7 @@ public class PaymorePresenter implements PaymorePreInterface {
                         initList();
                     } else {
                         e.printStackTrace();
+                        paymoreView.getListFail();
                     }
                 }
             });

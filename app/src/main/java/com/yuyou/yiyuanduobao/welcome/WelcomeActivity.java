@@ -47,7 +47,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView, EasyPe
     protected void initData() {
         phone = SharedPreferencesUtil.getStringData(mContext, "phone", null);
         presenter = new WelcomePresenter(this);
-        welcomeBottom.setText(getResources().getString(R.string.app_name) + " V " + BuildConfig.VERSION_NAME);
+        welcomeBottom.setText(getResources().getString(R.string.welcome_bottom) + " V " + BuildConfig.VERSION_NAME);
         welcomeBottom.postDelayed(new Runnable() {
             @Override
             public void run() {

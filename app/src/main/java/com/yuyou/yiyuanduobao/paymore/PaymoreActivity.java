@@ -158,6 +158,17 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
         svp.showSuccessWithStatus("充值失败，请稍候重试");
     }
 
+    @Override
+    public void getListFail() {
+        svp.showErrorWithStatus("获取失败，请稍后重试");
+        titleBack.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+             finish();
+            }
+        },500);
+    }
+
 
     @OnClick(R.id.title_back)
     public void onViewClicked() {

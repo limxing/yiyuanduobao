@@ -1,6 +1,7 @@
 package com.yuyou.yiyuanduobao.main;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -28,11 +29,15 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ItemView> {
     public VideoAdapter() {
         if (ProjectApplication.user != null) {
         }
+
     }
 
     @Override
     public ItemView onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = View.inflate(parent.getContext(), R.layout.fragment_video_item, null);
+//        TypedValue typedValue = new TypedValue();
+//        parent.getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
+//        v.setBackgroundResource(typedValue.resourceId);
         return new ItemView(v);
     }
 
