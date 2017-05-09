@@ -110,8 +110,8 @@ public class MainPresenter implements MainPreInterface {
 //                BuyData buyData=  new BuyData(adapter.getList().get(position).getId(), ProjectApplication.user.getPhone());
 //                buyData.save();
 //                adapter.notifyBuydata();
-            if (ProjectApplication.user.getAccount() != null && ProjectApplication.user.getAccount() >= 100) {
-                mainView.showGoldDialog(adapter.getList().get(position), 100);
+            if (ProjectApplication.user.getAccount() != null && ProjectApplication.user.getAccount() >= 1) {
+                mainView.showGoldDialog(adapter.getList().get(position), 1);
             } else {
                 pay(adapter.getList().get(position));
             }

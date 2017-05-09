@@ -108,7 +108,7 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
     @Override
     public void payView(String sOrderId, String sVacCode, final PayType payType) {
         svp.dismissImmediately();
-        String s1 = payType.getPrice() + " 学习金币";
+        String s1 = payType.getPrice() / 100 + " 学习金币";
         String s2 = payType.getPrice() / 100 + ".00";
         Pay.getInstance().payChannel(mContext, getString(R.string.app_name), getString(R.string.company), sVacCode,
                 s1, s2, sOrderId, new Pay.UnipayPayResultListener() {
@@ -149,7 +149,7 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
     public void paySuccess() {
         svp.showSuccessWithStatus("充值成功");
         paymoreAccount.setText(ProjectApplication.user.getAccount() + "");
-        Intent intent=new Intent("com.yuyou.account");
+        Intent intent = new Intent("com.yuyou.account");
         sendBroadcast(intent);
     }
 
@@ -164,9 +164,9 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
         titleBack.postDelayed(new Runnable() {
             @Override
             public void run() {
-             finish();
+                finish();
             }
-        },500);
+        }, 500);
     }
 
 

@@ -29,7 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         StatusBarCompat.translucentStatusBar(this);
         setContentView(getContentView());
         View topView = findViewById(R.id.title_topview);
-        if (topView != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (topView != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             int height = StatusBarCompat.getStatusBarHeight(this);
             topView.getLayoutParams().height = height;
         }

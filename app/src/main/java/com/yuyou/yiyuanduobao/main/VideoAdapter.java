@@ -49,7 +49,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ItemView> {
 
         holder.teacher.setText("讲师：" + list.get(i).getTeacher());
 
-        holder.isBuy.setText("￥ 1.00");
+        holder.isBuy.setText("1 金币");
 //        isBuyView.setVisibility(View.INVISIBLE);
         List<BuyData> buys = ProjectApplication.buyList;
         if (buys != null)
