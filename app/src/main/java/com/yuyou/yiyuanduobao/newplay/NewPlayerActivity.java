@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.leefeng.library.utils.SharedPreferencesUtil;
+import me.leefeng.library.utils.StringUtils;
 import me.leefeng.library.utils.ToastUtils;
 
 import rx.Observable;
@@ -489,7 +490,11 @@ public class NewPlayerActivity extends BaseActivity implements View.OnClickListe
             s = String.valueOf(s.charAt(0));
         }
         int i = Integer.parseInt(s) - 1;
-        u = course.getVideos().get(i).getUrl() + u + "-300K.mp4";
+        String endString = course.getVideos().get(i).getUrlend();
+        if (StringUtils.isEmpty(endString)) {
+            endString = "-300K.mp4";
+        }
+        u = course.getVideos().get(i).getUrl() + u + endString;
         return u;
     }
 }
