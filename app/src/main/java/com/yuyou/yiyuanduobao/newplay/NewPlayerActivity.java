@@ -485,14 +485,22 @@ public class NewPlayerActivity extends BaseActivity implements View.OnClickListe
                 }
             }
         }
+        /**
+         * 去集合中的位置，第一节 1-1，为了获取url
+         */
         String s = name.substring(0, 2);
         if (s.contains(".")) {
             s = String.valueOf(s.charAt(0));
         }
         int i = Integer.parseInt(s) - 1;
+
+
         String endString = course.getVideos().get(i).getUrlend();
         if (StringUtils.isEmpty(endString)) {
             endString = "-300K.mp4";
+        }
+        if (course.getVideos().get(i).getFirstiszero() == 1) {
+            u = "C00S00P00";
         }
         u = course.getVideos().get(i).getUrl() + u + endString;
         return u;

@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +27,10 @@ import butterknife.BindView;
 import me.leefeng.library.utils.LogUtils;
 import me.leefeng.library.utils.SharedPreferencesUtil;
 import me.leefeng.library.utils.StringUtils;
+import me.leefeng.library.utils.ToastUtils;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
+import me.leefeng.promptlibrary.PromptDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 /**
@@ -67,6 +72,21 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView, EasyPe
     private void permission() {
 //        if (ProjectApplication.mApplication == null)
 //            initUnipay();
+
+        String s = Build.MODEL + "==" + Build.VERSION.RELEASE + "==" + Build.VERSION.SDK_INT;
+        if (Build.VERSION.SDK_INT < 21) {
+            PromptDialog promptDialog = new PromptDialog(this);
+            promptDialog .getAlertDefaultBuilder().cancleAble(false);
+            promptDialog.showWarnAlert("当前Android版本：" + Build.VERSION.RELEASE + "\n" +
+                    "最低支持Android 5.0", new PromptButton("确定", new PromptButtonListener() {
+                @Override
+                public void onClick(PromptButton promptButton) {
+                    finish();
+                }
+            }));
+            return;
+        }
+//        ToastUtils.showLong(mContext, s);
         if (StringUtils.isEmpty(phone)) {
             mainSplash.setVisibility(View.VISIBLE);
             mainSplash.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +114,8 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView, EasyPe
             startActivity(intent);
             finish();
         }
+
+
     }
 
 
@@ -166,6 +188,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView, EasyPe
             LogUtils.i("onPermissionsGranted");
             initUnipay();
 //            finish();
+
 //            ToastUtils.showLong(mContext,"正在初始化");
 //            Intent intent = getBaseContext().getPackageManager()
 //                    .getLaunchIntentForPackage(getBaseContext().getPackageName());

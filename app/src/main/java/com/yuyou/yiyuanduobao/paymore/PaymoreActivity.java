@@ -80,12 +80,14 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
 
     @Override
     public void showLoading(String msg) {
-        svp.showLoading(msg);
+//        svp.showLoading(msg);
+        promptDialog.showLoading(msg);
     }
 
     @Override
     public void getListSuccess() {
-        svp.dismissImmediately();
+//        svp.dismissImmediately();
+        promptDialog.dismissImmediately();
 
 
     }
@@ -97,7 +99,8 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
 
     @Override
     public void svpDismiss() {
-        svp.dismissImmediately();
+        promptDialog.dismissImmediately();
+//        svp.dismissImmediately();
     }
 
     @Override
@@ -107,8 +110,9 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
 
     @Override
     public void payView(String sOrderId, String sVacCode, final PayType payType) {
-        svp.dismissImmediately();
-        String s1 = payType.getPrice() / 100 + " 学习金币";
+//        svp.dismissImmediately();
+        promptDialog.dismiss();
+        String s1 = payType.getPrice() / 100 + " 金币";
         String s2 = payType.getPrice() / 100 + ".00";
         Pay.getInstance().payChannel(mContext, getString(R.string.app_name), getString(R.string.company), sVacCode,
                 s1, s2, sOrderId, new Pay.UnipayPayResultListener() {
@@ -135,10 +139,11 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
 
                             } else {
                                 presenter.paySuccess(payType);
-                                Toast.makeText(mContext, "支付成功", Toast.LENGTH_LONG).show();
+//                                Toast.makeText(mContext, "支付成功", Toast.LENGTH_LONG).show();
                             }
                         } else if (arg1 == 3) {
-                            Toast.makeText(mContext, "用户取消支付", Toast.LENGTH_LONG).show();
+                            promptDialog.showInfo("用户取消支付");
+//                            Toast.makeText(mContext, "用户取消支付", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -147,7 +152,8 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
 
     @Override
     public void paySuccess() {
-        svp.showSuccessWithStatus("充值成功");
+//        svp.showSuccessWithStatus("充值成功");
+        promptDialog.showSuccess("充值成功");
         paymoreAccount.setText(ProjectApplication.user.getAccount() + "");
         Intent intent = new Intent("com.yuyou.account");
         sendBroadcast(intent);
@@ -155,18 +161,20 @@ public class PaymoreActivity extends BaseActivity implements PaymoreView {
 
     @Override
     public void payFail() {
-        svp.showSuccessWithStatus("充值失败，请稍候重试");
+//        svp.showSuccessWithStatus("充值失败，请稍候重试");
+        promptDialog.showError("充值失败，请稍候重试");
     }
 
     @Override
     public void getListFail() {
-        svp.showErrorWithStatus("获取失败，请稍后重试");
+//        svp.showErrorWithStatus("获取失败，请稍后重试");
+        promptDialog.showError("获取失败，请稍后重试");
         titleBack.postDelayed(new Runnable() {
             @Override
             public void run() {
                 finish();
             }
-        }, 500);
+        }, 1500);
     }
 
 

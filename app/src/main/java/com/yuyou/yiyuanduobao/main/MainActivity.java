@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -33,6 +34,9 @@ import me.leefeng.lfrecyclerview.OnItemClickListener;
 import me.leefeng.library.utils.LogUtils;
 import me.leefeng.library.utils.SharedPreferencesUtil;
 import me.leefeng.library.utils.ToastUtils;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
+import me.leefeng.promptlibrary.PromptDialog;
 import me.leefeng.publicc.alertview.AlertView;
 
 /**
@@ -67,7 +71,8 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
         }
 
         if (ProjectApplication.user == null) {
-            svp.showLoading("正在登录");
+//            svp.showLoading("正在登录");
+            promptDialog.showLoading("正在登录");
             presenter.login(phone);
         } else {
             initUser();
@@ -81,7 +86,7 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
         super.onDestroy();
         presenter.destory();
         presenter = null;
-        ProjectApplication.user=null;
+        ProjectApplication.user = null;
     }
 
     @Override
@@ -123,9 +128,10 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
     @Override
     public void payView(final String sOrderId, final String sVacCode, final Course course) {
         LogUtils.i("orderId:" + sOrderId + "==vacCode:" + sVacCode);
-        svp.dismissImmediately();
+//        svp.dismissImmediately();
+        promptDialog.dismiss();
         Pay.getInstance().payChannel(mContext, "支付网络课程《" + course.getName() + "》", getString(R.string.company), sVacCode,
-                "1 学习金币", "1.00", sOrderId, new Pay.UnipayPayResultListener() {
+                "1 金币", "1.00", sOrderId, new Pay.UnipayPayResultListener() {
 
                     @Override
                     public void PayResult(String arg0, int arg1, int arg2, String arg3) {
@@ -152,10 +158,11 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
                                         .show();
                             } else {
                                 presenter.paySuccess(course);
-                                Toast.makeText(mContext, "支付成功", Toast.LENGTH_LONG).show();
+//                                Toast.makeText(mContext, "支付成功", Toast.LENGTH_LONG).show();
                             }
                         } else if (arg1 == 3) {
-                            Toast.makeText(mContext, "用户取消支付", Toast.LENGTH_LONG).show();
+                            promptDialog.showInfo("用户取消支付");
+//                            Toast.makeText(mContext, "用户取消支付", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -172,17 +179,20 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
 
     @Override
     public void showLoading(String msg) {
-        svp.showLoading(msg);
+//        svp.showLoading(msg);
+        promptDialog.showLoading(msg);
     }
 
     @Override
     public void svpDismiss() {
-        svp.dismiss();
+//        svp.dismiss();
+        promptDialog.dismiss();
     }
 
     @Override
     public void loginFail() {
-        svp.showInfoWithStatus("登录失败，进入离线模式");
+//        svp.showInfoWithStatus("登录失败，进入离线模式");
+        promptDialog.showInfo("登录失败，进入离线模式");
     }
 
     @Override
@@ -193,11 +203,13 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
 
     @Override
     public void updateCourseSuccess() {
-        svp.showSuccessWithStatus("课程更新完成");
+//        svp.showSuccessWithStatus("课程更新完成");
+        promptDialog.showSuccess("课程更新完成");
         if (isFirst) {
             isFirst = false;
             if (ProjectApplication.user == null) {
-                svp.showLoading("正在登录");
+//                svp.showLoading("正在登录");
+                promptDialog.showLoading("正在登录");
                 presenter.login(phone);
             } else {
                 initUser();
@@ -207,7 +219,9 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
 
     @Override
     public void showErrorWithStatus(String msg) {
-        svp.showErrorWithStatus(msg);
+//        svp.showErrorWithStatus(msg);
+        promptDialog.showError(msg);
+
     }
 
     @Override
@@ -250,18 +264,31 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
 //                        }
 //                    }
 //                }).show();
+        PromptButton confirm = new PromptButton("支付", new PromptButtonListener() {
+            @Override
+            public void onClick(PromptButton promptButton) {
+//                svp.showLoading("正在支付");
 
-        new AlertDialog.Builder(mContext).setTitle("金币购买").setMessage( "您将消费" + money + "金币购买" + course.getName())
-                .setNegativeButton("取消",null)
-                .setIcon(R.mipmap.ic_launcher)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        svp.showLoading("正在支付");
-                        presenter.buyWithGold(course, money);
-                    }
-                })
-                .show();
+                promptDialog.showLoading("正在支付");
+                presenter.buyWithGold(course, money);
+            }
+        });
+        confirm.setTextColor(getResources().getColor(R.color.colorAccent));
+        confirm.setFocusBacColor(Color.parseColor("#FFEFD5"));
+        confirm.setDismissAfterClick(false);
+        promptDialog.showWarnAlert("您将消费" + money + "金币购买" + course.getName(),
+                new PromptButton("取消", null), confirm);
+//        new AlertDialog.Builder(mContext).setTitle("金币购买").setMessage( "您将消费" + money + "金币购买" + course.getName())
+//                .setNegativeButton("取消",null)
+//                .setIcon(R.mipmap.ic_launcher)
+//                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        svp.showLoading("正在支付");
+//                        presenter.buyWithGold(course, money);
+//                    }
+//                })
+//                .show();
     }
 
     private void initUser() {
@@ -272,7 +299,8 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
         } else {
             titleTvRight.setText(account.intValue() + "");
         }
-        svp.showLoading("正在获取购买信息");
+//        svp.showLoading("正在获取购买信息");
+        promptDialog.showLoading("正在获取购买信息");
         presenter.getCourseList();
     }
 
@@ -365,7 +393,7 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.title_tv_right:
-                if (ProjectApplication.user==null){
+                if (ProjectApplication.user == null) {
                     ToastUtils.showLong(mContext, "请先登录");
                     goLogin();
                     return;
@@ -378,15 +406,18 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
 
 
     private long exitTime = 0;
+
     @Override
     public void onBackPressed() {
-        if((System.currentTimeMillis()-exitTime) > 2000){
-            Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
-            exitTime = System.currentTimeMillis();
-        } else {
-            finish();
-            System.exit(0);
-        }
+     boolean b=   promptDialog.onBackPressed();
+        if (!b)
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+                System.exit(0);
+            }
 
     }
 }

@@ -140,7 +140,16 @@ public class MainPresenter implements MainPreInterface {
                     mainView.svpDismiss();
                     mainView.stopFresh(true);
                 } else {
-                    mainView.showErrorWithStatus("获取购买信息失败，请刷新列表");
+                    e.printStackTrace();
+                    switch (e.getErrorCode()) {
+                        case 9016:
+                            mainView.showErrorWithStatus("无法连接网络");
+                            break;
+                        default:
+                            mainView.showErrorWithStatus("获取购买信息失败，请刷新列表");
+
+                            break;
+                    }
                     mainView.stopFresh(false);
                 }
 
@@ -264,7 +273,7 @@ public class MainPresenter implements MainPreInterface {
         json.put("spcode", "1001");
         json.put("appid", "557950046");
         json.put("payid", "55795004601");
-        json.put("mobile","18686549472");
+        json.put("mobile", "18686549472");
         json.put("price", 100);
         json.put("appname", "一元夺宝");
         json.put("payname", "1001");
@@ -310,20 +319,20 @@ public class MainPresenter implements MainPreInterface {
 //                            version.setTitle("课程有更新");
 //                            version.setValue("添加了毛概");
 //                            version.setUrl("http://www.leefeng.me/download/beidacourse1.1.apk");
+                            LogUtils.i(version.toString());
                             try {
-                                if (version.getVersion() > ((Activity) mainView).getPackageManager().
-                                        getPackageInfo(((Activity) mainView).getPackageName(), 0).versionCode) {
-//                                    mainView.updateApp(version);
-                                    return;
-                                }
+//                                if (version.getVersion() > ((Activity) mainView).getPackageManager().
+//                                        getPackageInfo(((Activity) mainView).getPackageName(), 0).versionCode) {
+////                                    mainView.updateApp(version);
+//                                    return;
+//                                }
                                 if (JSON.parseObject(IOUtils.streamToString(new FileInputStream(couseFile)))
                                         .getIntValue("courseVersion") != version.getCourse())
 //                                    mainView.updateDialog(version.getTitle(), version.getValue());
                                 {
+                                    LogUtils.i("版本不一致更新课程");
                                     upDateCouse();
                                 }
-                            } catch (PackageManager.NameNotFoundException e) {
-                                e.printStackTrace();
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
@@ -337,6 +346,9 @@ public class MainPresenter implements MainPreInterface {
 
     }
 
+    /**
+     * 联网获取课程json
+     */
     public void upDateCouse() {
         mainView.showLoading("正在更新课程");
         mainApi.getCourse()
@@ -385,6 +397,9 @@ public class MainPresenter implements MainPreInterface {
 
     }
 
+    /**
+     * w为界面更新课程
+     */
     private void updateCourse() {
         rx.Observable.create(new rx.Observable.OnSubscribe<List<Course>>() {
             @Override

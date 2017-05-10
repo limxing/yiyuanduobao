@@ -22,6 +22,8 @@ allprojects {
         flatDir{
             dirs 'libs' //就是你放aar的目录地址
         }
+        maven { url 'https://jitpack.io' }
+        maven { url "https://repo1.maven.org/maven2/" }
     }
 }
 

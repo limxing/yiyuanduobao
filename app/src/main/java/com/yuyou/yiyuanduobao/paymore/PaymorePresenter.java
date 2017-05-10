@@ -97,7 +97,7 @@ public class PaymorePresenter implements PaymorePreInterface {
         }
         final Long account = count;
 
-        user.setAccount(account + payType.getPrice());
+        user.setAccount(account + payType.getPrice() / 100);
         user.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -105,6 +105,7 @@ public class PaymorePresenter implements PaymorePreInterface {
                     paymoreView.paySuccess();
                 } else {
                     e.printStackTrace();
+
                     user.setAccount(account);
                     paymoreView.payFail();
                 }

@@ -73,7 +73,25 @@ public class Course {
 
     public class Video {
         private String url;
+        private String urlend;
+        private int firstiszero;
         private List<String> values;
+
+        public int getFirstiszero() {
+            return firstiszero;
+        }
+
+        public void setFirstiszero(int firstiszero) {
+            this.firstiszero = firstiszero;
+        }
+
+        public String getUrlend() {
+            return urlend;
+        }
+
+        public void setUrlend(String urlend) {
+            this.urlend = urlend;
+        }
 
         public List<String> getValues() {
             return values;

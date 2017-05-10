@@ -123,7 +123,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
             SMSSDK.submitVerificationCode("86", num, confirmNUm);
         }
         closeInput();
-        svp.showLoading("正在登录");
+        promptDialog.showLoading("正在登录");
+//        svp.showLoading("正在登录");
 
     }
 
@@ -137,7 +138,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
         String telRegex = "[1][34578]\\d{9}";
         if (num.length() == 11 && num.matches(telRegex)) {
             closeInput();
-            svp.showLoading("正在获取验证码");
+//            svp.showLoading("正在获取验证码");
+            promptDialog.showLoading("正在获取验证码");
             presenter.getPhoneConfirmNum(num);
         } else {
             ToastUtils.showLong(mContext, "手机格式错误");
@@ -149,7 +151,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                svp.showInfoWithStatus(msg);
+//                svp.showInfoWithStatus(msg);
+                promptDialog.showInfo(msg);
                 getPhoneConfirmNumSuccess = true;
                 timer.start();
             }
@@ -163,7 +166,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
             @Override
             public void run() {
                 getPhoneConfirmNumSuccess = false;
-                svp.showInfoWithStatus(message);
+//                svp.showInfoWithStatus(message);
+                promptDialog.showInfo(message);
                 loginPhone.setEnabled(true);
                 loginPhone.setText("获取验证码");
 //                task.cancel();
@@ -178,7 +182,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                svp.showInfoWithStatus("登录失败，请稍候重试");
+//                svp.showInfoWithStatus("登录失败，请稍候重试");
+                promptDialog.showInfo("登录失败，请稍候重试");
                 loginPhone.setEnabled(true);
                 loginPhone.setText("获取验证码");
 //                task.cancel();

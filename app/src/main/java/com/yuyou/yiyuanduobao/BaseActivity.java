@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import butterknife.ButterKnife;
 import me.leefeng.library.NoTitleBar.StatusBarCompat;
 import me.leefeng.library.NoTitleBar.SystemBarTintManager;
 import me.leefeng.library.SVProgressHUD.SVProgressHUD;
+import me.leefeng.promptlibrary.PromptDialog;
 
 /**
  * @author FengTing
@@ -21,7 +23,8 @@ import me.leefeng.library.SVProgressHUD.SVProgressHUD;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     protected Context mContext;
-    protected SVProgressHUD svp;
+    protected PromptDialog promptDialog;
+//    protected SVProgressHUD svp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mContext = this;
         initView();
-        svp = new SVProgressHUD(mContext);
+//        svp = new SVProgressHUD(mContext);
+        promptDialog = new PromptDialog(this);
+        promptDialog.getDefaultBuilder().backAlpha(0).roundAlpha(200);
         initData();
         registBrodcast();//注册广播
 

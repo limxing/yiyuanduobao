@@ -7,7 +7,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.yuyou.yiyuanduobao"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -115,4 +115,7 @@ dependencies {
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
     //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
+
+    compile 'com.github.limxing:Android-PromptDialog:1.0.2'
+//    compile group: 'org.robolectric', name: 'android-all', version: '5.0.0_r2-robolectric-1'//SubscriptionManager
 }
