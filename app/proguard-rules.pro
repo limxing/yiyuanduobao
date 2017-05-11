@@ -17,7 +17,10 @@
 
 -dontwarn com.litesuits.orm.**
 -keep class com.litesuits.orm.**{*;}
-#---------------------------------1.实体类---------------------------------
+#---------------------------------播放器---------------------------------
+-dontwarn tv.danmaku.ijk.**
+-keep class tv.danmaku.ijk.** { *; }
+#---------------------------------播放器---------------------------------
 ######--butterknife--#######
 -keep class butterknife.** { *; }
  -dontwarn butterknife.internal.**
