@@ -9,7 +9,7 @@ import com.litesuits.orm.db.enums.AssignType;
  * Created by FengTing on 2017/5/11.
  * https://www.github.com/limxing
  */
-@Table("test_model")
+@Table("db_buy")
 public class DBBuy {
     // 指定自增，每个对象需要有一个主键
     @PrimaryKey(AssignType.AUTO_INCREMENT)

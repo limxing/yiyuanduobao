@@ -1,6 +1,7 @@
 #---------------------------------1.实体类---------------------------------
 
 -keep class com.yuyou.yiyuanduobao.bean.** { *; }
+-keep class com.yuyou.yiyuanduobao.dbmodel.** { *; }
 
 #-------------------------------------------------------------------------
 
@@ -12,6 +13,10 @@
 -keep class com.unicom.**{*;}
 -dontwarn com.sun.**
 -keep class com.sun.**{*;}
+#---------------------------------数据库操作liteorm---------------------------------
+
+-dontwarn com.litesuits.orm.**
+-keep class com.litesuits.orm.**{*;}
 #---------------------------------1.实体类---------------------------------
 ######--butterknife--#######
 -keep class butterknife.** { *; }

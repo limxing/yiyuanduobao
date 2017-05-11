@@ -41,7 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initView();
 //        svp = new SVProgressHUD(mContext);
         promptDialog = new PromptDialog(this);
-        promptDialog.getDefaultBuilder().backAlpha(0).roundAlpha(200);
+        promptDialog.getDefaultBuilder().backAlpha(0).roundAlpha(200).stayDuration(1300l);
         initData();
         registBrodcast();//注册广播
 
