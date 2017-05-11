@@ -13,7 +13,7 @@ public interface MainPreInterface {
 
     void login(String phone);
 
-    void isBuy(int position);
+    boolean isBuy(int position);
 
     void getCourseList();
 

@@ -97,29 +97,28 @@ public class MainPresenter implements MainPreInterface {
         });
     }
 
+    @Override
+    public boolean isBuy(int position) {
+        return adapter.isBuy(position);
+    }
+
     /**
      * 条目的点击事件
      *
      * @param position
      */
-    @Override
-    public void isBuy(final int position) {
-        boolean isBuy = adapter.isBuy(position);
-        if (isBuy) {
-            mainView.openPlayer(position);
-        } else {
 
+    public void toBuy(int position) {
 //                BuyData buyData=  new BuyData(adapter.getList().get(position).getId(), ProjectApplication.user.getPhone());
 //                buyData.save();
 //                adapter.notifyBuydata();
-            if (ProjectApplication.user.getAccount() != null && ProjectApplication.user.getAccount() >= 1) {
-                mainView.showGoldDialog(adapter.getList().get(position), 1);
-            } else {
-                pay(adapter.getList().get(position));
-            }
-
-
+        if (ProjectApplication.user.getAccount() != null && ProjectApplication.user.getAccount() >= 1) {
+            mainView.showGoldDialog(adapter.getList().get(position), 1);
+        } else {
+            pay(adapter.getList().get(position));
         }
+
+
     }
 
 

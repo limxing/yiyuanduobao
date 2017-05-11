@@ -313,11 +313,15 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
     @Override
     public void onClick(int position) {
         LogUtils.i("list click:" + position);
+        if (presenter.isBuy(position)){
+            openPlayer(position);
+            return;
+        }
         if (ProjectApplication.user == null) {
             //去登陆
             goLogin();
         } else {
-            presenter.isBuy(position);
+            presenter.toBuy(position);
         }
     }
 
