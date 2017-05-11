@@ -11,15 +11,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.litesuits.orm.log.OrmLog;
 import com.unicom.shield.unipay;
 import com.yuyou.yiyuanduobao.BaseActivity;
 import com.yuyou.yiyuanduobao.BuildConfig;
 import com.yuyou.yiyuanduobao.ProjectApplication;
 import com.yuyou.yiyuanduobao.R;
+import com.yuyou.yiyuanduobao.bean.BuyData;
+import com.yuyou.yiyuanduobao.bean.User;
+import com.yuyou.yiyuanduobao.dbmodel.DBBuy;
 import com.yuyou.yiyuanduobao.login.LoginActivity;
 import com.yuyou.yiyuanduobao.main.MainActivity;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -66,6 +71,19 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView, EasyPe
 
             }
         }, 3000);
+
+        List<DBBuy> list = ProjectApplication.liteOrm.query(DBBuy.class);
+        OrmLog.i("leefeng", list);
+        List<BuyData> buyDatas = new ArrayList<>();
+        for (DBBuy dbBuy : list) {
+            BuyData buyData = new BuyData();
+            buyData.setCourseid(dbBuy.getCourseid());
+            User user = new User();
+            user.setPhone(dbBuy.getUsername());
+            buyData.setUser(user);
+            buyDatas.add(buyData);
+        }
+        ProjectApplication.buyList = buyDatas;
     }
 
 
@@ -73,10 +91,10 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView, EasyPe
 //        if (ProjectApplication.mApplication == null)
 //            initUnipay();
 
-        String s = Build.MODEL + "==" + Build.VERSION.RELEASE + "==" + Build.VERSION.SDK_INT;
+//        String s = Build.MODEL + "==" + Build.VERSION.RELEASE + "==" + Build.VERSION.SDK_INT;
         if (Build.VERSION.SDK_INT < 21) {
             PromptDialog promptDialog = new PromptDialog(this);
-            promptDialog .getAlertDefaultBuilder().cancleAble(false);
+            promptDialog.getAlertDefaultBuilder().cancleAble(false);
             promptDialog.showWarnAlert("当前Android版本：" + Build.VERSION.RELEASE + "\n" +
                     "最低支持Android 5.0", new PromptButton("确定", new PromptButtonListener() {
                 @Override

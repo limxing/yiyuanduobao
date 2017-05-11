@@ -192,7 +192,7 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
     @Override
     public void loginFail() {
 //        svp.showInfoWithStatus("登录失败，进入离线模式");
-        promptDialog.showInfo("登录失败，进入离线模式");
+        promptDialog.showWarnAlert("登录失败，进入离线模式", new PromptButton("确定", null));
     }
 
     @Override
@@ -409,7 +409,8 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
 
     @Override
     public void onBackPressed() {
-     boolean b=   promptDialog.onBackPressed();
+        boolean b = promptDialog.onBackPressed();
+        LogUtils.i(b + "");
         if (b)
             if ((System.currentTimeMillis() - exitTime) > 2000) {
                 Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();

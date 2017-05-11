@@ -56,6 +56,16 @@ public class LoginActivity extends BaseActivity implements LoginView {
         isBack = getIntent().getBooleanExtra("isBack", false);
         presenter = new LoginPresenter(this);
         timer = new TimeCount(60000, 1000);
+        if (isBack) {
+            titleBack.setVisibility(View.VISIBLE);
+            titleBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setResult(Activity.RESULT_CANCELED);
+                    finish();
+                }
+            });
+        }
 
     }
 
@@ -73,16 +83,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
         titleName.setText("登录");
         titleBack.setVisibility(View.GONE);
         titleTvRight.setVisibility(View.INVISIBLE);
-        if (isBack) {
-            titleBack.setVisibility(View.VISIBLE);
-            titleBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setResult(Activity.RESULT_CANCELED);
-                    finish();
-                }
-            });
-        }
     }
 
     @Override

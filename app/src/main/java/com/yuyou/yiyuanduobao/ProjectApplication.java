@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 
 
+import com.litesuits.orm.LiteOrm;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.unicom.shield.UnicomApplicationWrapper;
 import com.unicom.shield.unipay;
@@ -37,6 +38,9 @@ public class ProjectApplication extends UnicomApplicationWrapper {
     public static boolean isDebug = true;
     public static Context attachContext;
 
+    public static LiteOrm liteOrm;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -44,7 +48,7 @@ public class ProjectApplication extends UnicomApplicationWrapper {
         LogUtils.i("Application===onCreat");
 
 //        mApplication.onCreate();
-        application=this;
+        application = this;
         startService(new Intent(this, DownLoadService.class));
         //后端云
         Bmob.initialize(this, "b8f0593656c47a6539e7f7253ecf4d37");
@@ -54,6 +58,12 @@ public class ProjectApplication extends UnicomApplicationWrapper {
 
         CrashReport.initCrashReport(getApplicationContext(), "15da576048", isDebug);
 //        if (isDebug)
+
+
+        if (liteOrm == null) {
+            liteOrm = LiteOrm.newSingleInstance(this, "liteorm.db");
+        }
+        liteOrm.setDebugged(isDebug); // open the log
     }
 
     @Override
@@ -68,7 +78,7 @@ public class ProjectApplication extends UnicomApplicationWrapper {
 
 //
 
-//    public ProjectApplication() {
+    //    public ProjectApplication() {
 //        LogUtils.i("Application===ProjectApplication()");
 //    }
 //
@@ -76,8 +86,8 @@ public class ProjectApplication extends UnicomApplicationWrapper {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         LogUtils.i("Application===attachBaseContext");
-        application=this;
-        attachContext=base;
+        application = this;
+        attachContext = base;
     }
 //
 //    public void onConfigurationChanged(Configuration var1) {

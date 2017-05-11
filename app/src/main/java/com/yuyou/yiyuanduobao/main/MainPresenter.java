@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 
 import com.alibaba.fastjson.JSON;
+import com.litesuits.orm.LiteOrm;
 import com.yuyou.yiyuanduobao.ProjectApplication;
 import com.yuyou.yiyuanduobao.bean.BuyData;
 import com.yuyou.yiyuanduobao.bean.Course;
 import com.yuyou.yiyuanduobao.bean.User;
 import com.yuyou.yiyuanduobao.bean.Version;
+import com.yuyou.yiyuanduobao.dbmodel.DBBuy;
 import com.yuyou.yiyuanduobao.utils.HttpSend;
 import com.yuyou.yiyuanduobao.utils.SecUtil;
 
@@ -135,6 +137,11 @@ public class MainPresenter implements MainPreInterface {
                     LogUtils.i(list.toString());
                     ProjectApplication.buyList = list;
                     //缓存本地
+                    ProjectApplication.liteOrm.deleteAll(DBBuy.class);
+                    for (BuyData buyData : list) {
+                        ProjectApplication.liteOrm.save(new DBBuy(ProjectApplication.user.getPhone(), buyData.getCourseid()));
+                    }
+
                     //...
                     adapter.notifyBuydata();
                     mainView.svpDismiss();

@@ -1,5 +1,7 @@
 package com.yuyou.yiyuanduobao.bean;
 
+import com.litesuits.orm.db.annotation.Table;
+
 import cn.bmob.v3.BmobObject;
 
 /**
