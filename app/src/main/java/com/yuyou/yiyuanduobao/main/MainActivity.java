@@ -410,7 +410,7 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
     @Override
     public void onBackPressed() {
      boolean b=   promptDialog.onBackPressed();
-        if (!b)
+        if (b)
             if ((System.currentTimeMillis() - exitTime) > 2000) {
                 Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();

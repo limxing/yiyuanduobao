@@ -103,7 +103,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     public void login(View view) {
         //测试，直接登录\
         if (ProjectApplication.isDebug) {
-            num = "17600189887";
+            num = "18514528236";
             presenter.getUserInfo(num);
         }
 
@@ -170,6 +170,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 promptDialog.showInfo(message);
                 loginPhone.setEnabled(true);
                 loginPhone.setText("获取验证码");
+                timer.cancel();
 //                task.cancel();
             }
         });
@@ -186,6 +187,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 promptDialog.showInfo("登录失败，请稍候重试");
                 loginPhone.setEnabled(true);
                 loginPhone.setText("获取验证码");
+//                取消动画
+                timer.cancel();
 //                task.cancel();
             }
         });
