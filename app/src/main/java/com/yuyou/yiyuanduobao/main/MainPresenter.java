@@ -2,6 +2,7 @@ package com.yuyou.yiyuanduobao.main;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.os.Environment;
 
 import com.alibaba.fastjson.JSON;
 import com.litesuits.orm.LiteOrm;
@@ -298,6 +299,7 @@ public class MainPresenter implements MainPreInterface {
 
     public void initUpdata() {
         couseFile = new File(((Activity) mainView).getCacheDir(), course);
+
         mainApi = new Retrofit.Builder()
                 .baseUrl("http://leefeng.me")
                 .addConverterFactory(GsonConverterFactory.create())

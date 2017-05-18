@@ -499,7 +499,7 @@ public class NewPlayerActivity extends BaseActivity implements View.OnClickListe
         if (StringUtils.isEmpty(endString)) {
             endString = "-300K.mp4";
         }
-        if (course.getVideos().get(i).getFirstiszero() == 1) {
+        if (course.getVideos().get(i).getFirstiszero() == 1 && name.substring(0, name.indexOf(" ")).equals("1.0")) {
             u = "C00S00P00";
         }
         u = course.getVideos().get(i).getUrl() + u + endString;

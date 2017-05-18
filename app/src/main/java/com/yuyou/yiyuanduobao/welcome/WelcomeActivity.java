@@ -249,4 +249,8 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView, EasyPe
     }
 
 
+    @Override
+    public void showToast(String message) {
+        ToastUtils.showShort(mContext,message);
+    }
 }
