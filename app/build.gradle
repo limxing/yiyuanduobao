@@ -1,16 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'//butterknife增加这一句增加这一句
-apply plugin: 'org.greenrobot.greendao' // apply plugin
+//apply plugin: 'org.greenrobot.greendao' // apply plugin
 
 android {
     compileSdkVersion 24
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.yuyou.yiyuanduobao"
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.2.1"
+        versionCode 3
+        versionName "1.4.4"
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         //分开打包
@@ -54,7 +54,7 @@ android {
             debuggable true
         }
         release {
-            debuggable true
+            debuggable false
         }
     }
 }
@@ -118,4 +118,5 @@ dependencies {
     compile 'com.github.limxing:Android-PromptDialog:1.0.3'
     //    compile group: 'org.robolectric', name: 'android-all', version: '5.0.0_r2-robolectric-1'//SubscriptionManager
     compile files('libs/lite-orm-1.9.2.jar')
+    provided files('runtime/unicompay_ref.jar')
 }

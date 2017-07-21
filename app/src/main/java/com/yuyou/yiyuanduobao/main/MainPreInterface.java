@@ -20,4 +20,6 @@ public interface MainPreInterface {
     void paySuccess(Course course);
 
     void buyWithGold(Course course, int money);
+
+    void getPayifSuccess(String orderId, Course currentCurse);
 }

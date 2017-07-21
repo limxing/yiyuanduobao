@@ -10,6 +10,15 @@ public class PayType extends BmobObject {
     Long payid;
     Long price;
     String name;
+    String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public Long getPayid() {
         return payid;

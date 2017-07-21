@@ -92,18 +92,18 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView, EasyPe
 //            initUnipay();
 
 //        String s = Build.MODEL + "==" + Build.VERSION.RELEASE + "==" + Build.VERSION.SDK_INT;
-        if (Build.VERSION.SDK_INT < 21) {
-            PromptDialog promptDialog = new PromptDialog(this);
-            promptDialog.getAlertDefaultBuilder().cancleAble(false);
-            promptDialog.showWarnAlert("当前Android版本：" + Build.VERSION.RELEASE + "\n" +
-                    "最低支持Android 5.0", new PromptButton("确定", new PromptButtonListener() {
-                @Override
-                public void onClick(PromptButton promptButton) {
-                    finish();
-                }
-            }));
-            return;
-        }
+//        if (Build.VERSION.SDK_INT < 21) {
+//            PromptDialog promptDialog = new PromptDialog(this);
+//            promptDialog.getAlertDefaultBuilder().cancleAble(false);
+//            promptDialog.showWarnAlert("当前Android版本：" + Build.VERSION.RELEASE + "\n" +
+//                    "最低支持Android 5.0", new PromptButton("确定", new PromptButtonListener() {
+//                @Override
+//                public void onClick(PromptButton promptButton) {
+//                    finish();
+//                }
+//            }));
+//            return;
+//        }
 //        ToastUtils.showLong(mContext, s);
         if (StringUtils.isEmpty(phone)) {
             mainSplash.setVisibility(View.VISIBLE);
@@ -201,10 +201,11 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView, EasyPe
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
         if (mListener != null) {
-            mListener.superPermission();//同意了全部权限的回调
-            ProjectApplication.mApplication = null;
             LogUtils.i("onPermissionsGranted");
-            initUnipay();
+            mListener.superPermission();//同意了全部权限的回调
+//            ProjectApplication.mApplication = null;
+
+//            initUnipay();
 //            finish();
 
 //            ToastUtils.showLong(mContext,"正在初始化");

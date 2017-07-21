@@ -139,7 +139,7 @@ public class NewPlayerActivity extends BaseActivity implements View.OnClickListe
 
                 player.stop();
 
-                player.setTitle(playerItemBeanList.get(current).getName());
+                player.setTitle(playerItemBeanList.get(current).getRealName());
                 file = new File(playerItemBeanList.get(current).getPath());
                 if (file.exists()) {
                     player.setUrl(file.toString()).play(0);
@@ -202,7 +202,7 @@ public class NewPlayerActivity extends BaseActivity implements View.OnClickListe
                 if (current < playerItemBeanList.size()) {
                     url = course.getVideos().get((int) mAdapter.getHeaderId(current)).getUrl();
                     playerItemBeanList.get(current).setPlaying(true);
-                    player.setTitle(playerItemBeanList.get(current).getName());
+                    player.setTitle(playerItemBeanList.get(current).getRealName());
                     file = new File(playerItemBeanList.get(current).getPath());
                     if (file.exists()) {
                         player.setUrl(file.toString()).play(0);
@@ -231,7 +231,7 @@ public class NewPlayerActivity extends BaseActivity implements View.OnClickListe
                 ToastUtils.showLong(mContext, "播放失败");
 
             }
-        }).setTitle(playerItemBeanList.get(current).getName())//设置视频的titleName
+        }).setTitle(playerItemBeanList.get(current).getRealName())//设置视频的titleName
                 .setCoverImage(R.drawable.default_player);
         file = new File(playerItemBeanList.get(current).getPath());
         if (file.exists()) {
@@ -484,6 +484,10 @@ public class NewPlayerActivity extends BaseActivity implements View.OnClickListe
                     u = u + "P00";
                 }
             }
+        }
+
+        if (name.contains("#")){
+            u=name.substring(name.indexOf("#")+1);
         }
         /**
          * 去集合中的位置，第一节 1-1，为了获取url

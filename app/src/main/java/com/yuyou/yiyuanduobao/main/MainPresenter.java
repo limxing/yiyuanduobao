@@ -1,13 +1,11 @@
 package com.yuyou.yiyuanduobao.main;
 
 import android.app.Activity;
-import android.content.pm.PackageManager;
-import android.os.Environment;
 
 import com.alibaba.fastjson.JSON;
-import com.litesuits.orm.LiteOrm;
 import com.yuyou.yiyuanduobao.ProjectApplication;
 import com.yuyou.yiyuanduobao.bean.BuyData;
+import com.yuyou.yiyuanduobao.bean.BuySuccess;
 import com.yuyou.yiyuanduobao.bean.Course;
 import com.yuyou.yiyuanduobao.bean.User;
 import com.yuyou.yiyuanduobao.bean.Version;
@@ -18,11 +16,17 @@ import com.yuyou.yiyuanduobao.utils.SecUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -44,6 +48,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Subscriber;
 import rx.functions.Func1;
 
 /**
@@ -117,6 +122,7 @@ public class MainPresenter implements MainPreInterface {
             mainView.showGoldDialog(adapter.getList().get(position), 1);
         } else {
             pay(adapter.getList().get(position));
+//            mainView.payView("","",adapter.getList().get(position));
         }
 
 
@@ -224,6 +230,55 @@ public class MainPresenter implements MainPreInterface {
         });
     }
 
+    /**
+     * 访问网络是否购买成功
+     * @param orderId
+     * @param currentCurse
+     */
+    @Override
+    public void getPayifSuccess(final String orderId, final Course currentCurse) {
+        rx.Observable.create(new rx.Observable.OnSubscribe<BuySuccess>() {
+            @Override
+            public void call(Subscriber<? super BuySuccess> subscriber) {
+
+                String post = "phone="+ProjectApplication.user.getPhone()+"&orderid="+orderId+"&price=100";
+
+                String result = postDownloadJson("http://yuyou.meiquant.com/api/worldplay/account/addcoin",post);
+                LogUtils.i("请求支付结果查询:"+result);
+                if (result==null){
+                   subscriber.onError(new Throwable("请求失败，请重试"));
+                }else{
+                  subscriber.onNext(JSON.parseObject(result,BuySuccess.class));
+                }
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(rx.schedulers.Schedulers.io())
+                .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<BuySuccess>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        mainView.showErrorWithStatus(throwable.getMessage());
+
+                    }
+
+                    @Override
+                    public void onNext(BuySuccess buySuccess) {
+                        if (buySuccess.isStatus()){
+                           paySuccess(currentCurse);
+                        }else{
+                            mainView.showErrorWithStatus(buySuccess.getMsg());
+                        }
+
+                    }
+                });
+
+    }
+
     private void initPay(final Course course) {
 
         Observable.create(new ObservableOnSubscribe<String>() {
@@ -318,7 +373,7 @@ public class MainPresenter implements MainPreInterface {
 
                         @Override
                         public void onError(Throwable e) {
-
+mainView.svpDismiss();
                         }
 
                         @Override
@@ -443,5 +498,80 @@ public class MainPresenter implements MainPreInterface {
 
     }
 
+
+
+    /**
+     * 从网络获取json数据,(String byte[})
+
+     * @param path
+     * @return
+     */
+    public static String getJsonByInternet(String path){
+        try {
+            URL url = new URL(path.trim());
+            //打开连接
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+            if(200 == urlConnection.getResponseCode()){
+                //得到输入流
+                InputStream is =urlConnection.getInputStream();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int len = 0;
+                while(-1 != (len = is.read(buffer))){
+                    baos.write(buffer,0,len);
+                    baos.flush();
+                }
+                return baos.toString("utf-8");
+            }
+        }  catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+
+
+
+
+//获取其他页面的数据
+    /**
+     * POST请求获取数据
+     */
+    public  String postDownloadJson(String path,String post){
+        URL url = null;
+        try {
+            url = new URL(path);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod("POST");// 提交模式
+            httpURLConnection.setConnectTimeout(10000);//连接超时 单位毫秒
+            // conn.setReadTimeout(2000);//读取超时 单位毫秒
+            // 发送POST请求必须设置如下两行
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
+            // 获取URLConnection对象对应的输出流
+            PrintWriter printWriter = new PrintWriter(httpURLConnection.getOutputStream());
+            // 发送请求参数
+            printWriter.write(post);//post的参数 xx=xx&yy=yy
+            // flush输出流的缓冲
+            printWriter.flush();
+            //开始获取数据
+            BufferedInputStream bis = new BufferedInputStream(httpURLConnection.getInputStream());
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            int len;
+            byte[] arr = new byte[1024];
+            while((len=bis.read(arr))!= -1){
+                bos.write(arr,0,len);
+                bos.flush();
+            }
+            bos.close();
+            return bos.toString("utf-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

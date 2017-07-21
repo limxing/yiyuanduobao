@@ -13,6 +13,25 @@
 -keep class com.unicom.**{*;}
 -dontwarn com.sun.**
 -keep class com.sun.**{*;}
+
+#-libraryjars  libs/Multimode_UniPay_base.jar
+#-libraryjars  libs/miniapay.jar
+#-libraryjars  libs/alipaysdk.jar
+#-libraryjars  libs/MobileSecSdk.jar
+#-libraryjars  libs/utdid4all-1.0.4.jar
+
+-keep class com.unipay.account.**{*;}
+-keep class com.unicom.dcLoader.**{*;}
+-keep class com.unicom.wostore.unipay.paysecurity.**{*;}
+-keep class com.wow.shell.**{*;}
+
+-keep class cn.egame.terminal.miniapay.**{*;}
+-keep class egame.terminal.feesmslib.jni.**{*;}
+
+-keep class com.alipay.sdk.**{*;}
+-keep class com.alipay.auth.**{*;}
+-keep class com.alipay.android.app.**{*;}
+
 #---------------------------------数据库操作liteorm---------------------------------
 
 -dontwarn com.litesuits.orm.**

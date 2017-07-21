@@ -8,14 +8,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.unicom.xiaowo.Pay;
+import com.unicom.dcLoader.Utils;
 import com.yuyou.yiyuanduobao.BaseActivity;
 import com.yuyou.yiyuanduobao.ProjectApplication;
 import com.yuyou.yiyuanduobao.R;
@@ -25,6 +28,8 @@ import com.yuyou.yiyuanduobao.newplay.NewPlayerActivity;
 import com.yuyou.yiyuanduobao.paymore.PaymoreActivity;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +64,7 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
     private String phone;
     private final String course = "course.json";
     private boolean isFirst;
+    private Course currentCurse;
 
     @Override
     protected void initData() {
@@ -78,6 +84,12 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
             initUser();
         }
         presenter.initUpdata();
+        Utils.getInstances().initPayContext(this, new Utils.UnipayPayResultListener() {
+            @Override
+            public void PayResult(String s, int i, int i1, String s1) {
+                LogUtils.i("PayResult:"+s+"="+i+"="+i1+"="+s1);
+            }
+        });
 
     }
 
@@ -118,54 +130,118 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
     }
 
 
-//    @OnClick(R.id.main_bt)
+  //  private String cpProductName="支付的商品名称";
+    //    @OnClick(R.id.main_bt)
 //    public void onViewClicked() {
 //        Course course = new Course();
 //        course.setName("C语言设计");
 //        presenter.pay(course);
 //    }
+private  Utils.UnipayPayResultListener OnLineListener = new Utils.UnipayPayResultListener() {
+
+    @Override
+    public void PayResult(final String arg0, int arg1, int arg2, String arg3) {
+        switch (arg1) {
+            case 1://success
+                //此处放置支付请求已提交的相关处理代码
+//                showPayResultOnLine(cpProductName + " " + "支付请求已提交");
+                presenter.paySuccess(currentCurse);
+//                showLoading("正在检查支付状态");
+//                mainBt.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        presenter.getPayifSuccess(arg0,currentCurse);
+//                    }
+//                },1000);
+
+
+                break;
+
+            case 2://fail
+                //此处放置支付请求失败的相关处理代码
+                showPayResultOnLine(currentCurse.getName() + " " + "支付失败");
+                break;
+
+            case 3://cancel
+                //此处放置支付请求被取消的相关处理代码
+//                showPayResultOnLine(cpProductName + " " + "支付取消");
+                promptDialog.showInfo("支付取消");
+
+                break;
+
+            default:
+                showPayResultOnLine(currentCurse.getName() + " " + "支付结果未知");
+                break;
+        }
+    }
+};
+    protected  void showPayResultOnLine(final String result) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            public void run() {
+
+                promptDialog.getAlertDefaultBuilder().touchAble(false);
+                promptDialog.showWarnAlert(result,new PromptButton("确定",null));
+
+            }
+        });
+    }
 
     @Override
     public void payView(final String sOrderId, final String sVacCode, final Course course) {
         LogUtils.i("orderId:" + sOrderId + "==vacCode:" + sVacCode);
 //        svp.dismissImmediately();
-        promptDialog.dismiss();
-        Pay.getInstance().payChannel(mContext, "支付网络课程《" + course.getName() + "》", getString(R.string.company), sVacCode,
-                "1 金币", "1.00", sOrderId, new Pay.UnipayPayResultListener() {
+        promptDialog.dismissImmediately();
+        currentCurse=course;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        if (sOrderId.length() > 24){
+            Utils.getInstances().payOnline(mContext, "001", "170522582109",sOrderId.substring(0,24),OnLineListener);
+        }else {
 
-                    @Override
-                    public void PayResult(String arg0, int arg1, int arg2, String arg3) {
-                        LogUtils.i("联通返回结果：" + arg0 + "==" + arg1 + "==" + arg2 + "==" + arg3);
-                        if (arg1 == 1) {
-                            Toast.makeText(mContext, "支付请求已提交", Toast.LENGTH_LONG).show();
-                            presenter.paySuccess(course);
-                        } else if (arg1 == 2) {
-                            if (arg2 == 2) {
-                                new AlertDialog.Builder(mContext).setTitle("支付环境不安全")
-                                        .setCancelable(false)
-                                        .setMessage("请点击确定后，重新打开APP")
-                                        .setNegativeButton("确定", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent = getBaseContext().getPackageManager()
-                                                        .getLaunchIntentForPackage(getBaseContext().getPackageName());
-                                                PendingIntent restartIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-                                                AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                                                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 10, restartIntent); // 1秒钟后重启应用
-                                                System.exit(0);
-                                            }
-                                        })
-                                        .show();
-                            } else {
-                                presenter.paySuccess(course);
-//                                Toast.makeText(mContext, "支付成功", Toast.LENGTH_LONG).show();
-                            }
-                        } else if (arg1 == 3) {
-                            promptDialog.showInfo("用户取消支付");
-//                            Toast.makeText(mContext, "用户取消支付", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+            Utils.getInstances().payOnline(mContext, "001", "170522582109", sOrderId, OnLineListener);
+        }
+//        Utils.getInstances().pay(mContext, "001",sOrderId,OnLineListener);
+//        Utils.getInstances().
+//        Utils.getInstances().payOnline(mContext, "001", "0",sOrderId,OnLineListener);
+//        Utils.getInstances().payChannel(mContext,);
+//        Utils.getInstances().pay();
+
+//        Pay.getInstance().payChannel(mContext, "支付网络课程《" + course.getName() + "》", getString(R.string.company), sVacCode,
+//                "1 金币", "1.00", sOrderId, new Pay.UnipayPayResultListener() {
+//
+//                    @Override
+//                    public void PayResult(String arg0, int arg1, int arg2, String arg3) {
+//                        LogUtils.i("联通返回结果：" + arg0 + "==" + arg1 + "==" + arg2 + "==" + arg3);
+//                        if (arg1 == 1) {
+//                            Toast.makeText(mContext, "支付请求已提交", Toast.LENGTH_LONG).show();
+//                            presenter.paySuccess(course);
+//                        } else if (arg1 == 2) {
+//                            if (arg2 == 2) {
+//                                new AlertDialog.Builder(mContext).setTitle("支付环境不安全")
+//                                        .setCancelable(false)
+//                                        .setMessage("请点击确定后，重新打开APP")
+//                                        .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int which) {
+//                                                Intent intent = getBaseContext().getPackageManager()
+//                                                        .getLaunchIntentForPackage(getBaseContext().getPackageName());
+//                                                PendingIntent restartIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//                                                AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//                                                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 10, restartIntent); // 1秒钟后重启应用
+//                                                System.exit(0);
+//                                            }
+//                                        })
+//                                        .show();
+//                            } else {
+//                                presenter.paySuccess(course);
+////                                Toast.makeText(mContext, "支付成功", Toast.LENGTH_LONG).show();
+//                            }
+//                        } else if (arg1 == 3) {
+//                            promptDialog.showInfo("用户取消支付");
+////                            Toast.makeText(mContext, "用户取消支付", Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//                });
 
 
     }
@@ -254,16 +330,7 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
 
     @Override
     public void showGoldDialog(final Course course, final int money) {
-//        new AlertView("", "您将消费" + money + "金币购买" + course.getName(), "取消", new String[]{"确定"}, null, mContext, AlertView.Style.Alert,
-//                new me.leefeng.publicc.alertview.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(Object o, int position) {
-//                        if (position == 0) {
-//                            svp.showLoading("正在支付");
-//                            presenter.buyWithGold(course, money);
-//                        }
-//                    }
-//                }).show();
+
         PromptButton confirm = new PromptButton("支付", new PromptButtonListener() {
             @Override
             public void onClick(PromptButton promptButton) {
@@ -278,17 +345,6 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
         confirm.setDismissAfterClick(false);
         promptDialog.showWarnAlert("您将消费" + money + "金币购买" + course.getName(),
                 new PromptButton("取消", null), confirm);
-//        new AlertDialog.Builder(mContext).setTitle("金币购买").setMessage( "您将消费" + money + "金币购买" + course.getName())
-//                .setNegativeButton("取消",null)
-//                .setIcon(R.mipmap.ic_launcher)
-//                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        svp.showLoading("正在支付");
-//                        presenter.buyWithGold(course, money);
-//                    }
-//                })
-//                .show();
     }
 
     private void initUser() {
@@ -424,5 +480,19 @@ public class MainActivity extends BaseActivity implements MainView, OnItemClickL
                 System.exit(0);
             }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //可选接口
+        Utils.getInstances().onResume(this);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        //可选接口
+        Utils.getInstances().onPause(this);
     }
 }

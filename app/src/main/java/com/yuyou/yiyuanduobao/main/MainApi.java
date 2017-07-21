@@ -1,6 +1,7 @@
 package com.yuyou.yiyuanduobao.main;
 
 
+import com.yuyou.yiyuanduobao.bean.BuySuccess;
 import com.yuyou.yiyuanduobao.bean.Version;
 
 import okhttp3.ResponseBody;
@@ -23,4 +24,6 @@ public interface MainApi {
 
     @GET
     Observable<ResponseBody> getApp(@Url String url);
+
+
 }

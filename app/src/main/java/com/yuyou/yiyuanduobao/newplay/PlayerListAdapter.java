@@ -120,7 +120,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Ma
     @Override
     public void onBindViewHolder(MasonryTextView holder, int position) {
         PlayerItemBean playerItemBean = playerItemBeanList.get(position);
-        holder.textView.setText(playerItemBean.getName());
+        holder.textView.setText(playerItemBean.getRealName());
         holder.textView.setTag(position);
         //判断是否存在这个下载任务
         if (!isDown&&isDownloadController&&(downloadList.contains(playerItemBean.getUrl())

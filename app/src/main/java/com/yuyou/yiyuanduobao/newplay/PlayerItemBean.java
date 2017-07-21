@@ -97,4 +97,11 @@ public class PlayerItemBean implements Comparable {
         return Integer.parseInt(ss[0] + "" + ss[1] + ss[2]);
 
     }
+
+    public String getRealName() {
+        if (name.contains("#")){
+            return name.substring(0,name.indexOf("#"));
+        }
+        return name;
+    }
 }

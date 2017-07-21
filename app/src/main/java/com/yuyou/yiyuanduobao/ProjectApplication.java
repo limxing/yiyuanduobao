@@ -35,7 +35,7 @@ public class ProjectApplication extends UnicomApplicationWrapper {
 
     public static ProjectApplication application;
 
-    public static boolean isDebug = false;
+    public static boolean isDebug = true;
     public static Context attachContext;
 
     public static LiteOrm liteOrm;
@@ -56,7 +56,7 @@ public class ProjectApplication extends UnicomApplicationWrapper {
         SMSSDK.initSDK(this, "1d50a38c893be", "3c3903461ca3c72aa8e8e9d01c42489c");//一元夺宝的
 //        SMSSDK.initSDK(this, "189b617b10eb4", "bbdaa1208d663cbc3b8b4f628ef39fd8");//北大的
 
-        CrashReport.initCrashReport(getApplicationContext(), "15da576048", isDebug);
+        CrashReport.initCrashReport(getApplicationContext());
 //        if (isDebug)
 
 

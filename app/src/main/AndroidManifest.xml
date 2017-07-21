@@ -17,6 +17,11 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_LOGS" />
 
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
     <application
         android:name=".ProjectApplication"
         android:allowBackup="true"
@@ -29,20 +34,77 @@
         <activity android:name=".main.MainActivity">
 
         </activity>
-        <service android:name="com.unicom.wostore.unipay.paysecurity.SecurityServiceFramework" >
-            <!--<intent-filter>-->
-                <!--<action android:name="com.yuyou.yiyuanduobao.unicom.wostore.unipay.securityserviceframework" />-->
-            <!--</intent-filter>-->
 
-        </service>
+        <!--支付-->
+        <meta-data
+            android:name="wostore_billing_chinaunicom"
+            android:value="true" />
+        <meta-data
+            android:name="wostore_billing_chinamobile"
+            android:value="false" />
+        <meta-data
+            android:name="wostore_billing_chinatele"
+            android:value="true" />
+
+        <receiver android:name="com.unicom.xiaowo.SecurityReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="com.unicom.xiaowo.security.RECEIVER_CMD" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.unicom.wostore.unipay.paysecurity.SecurityServiceFramework" />
+
         <activity
             android:name="com.unicom.wostore.unipay.paysecurity.SecurityActivity"
             android:configChanges="screenSize|orientation"
             android:excludeFromRecents="true"
             android:exported="true"
             android:launchMode="singleInstance"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
 
+        <activity
+            android:name="com.unicom.wostore.unipay.paysecurity.PayActivity"
+            android:configChanges="screenSize|orientation"
+            android:exported="true"
+            android:launchMode="standard"></activity>
+
+        <!--alipaysdk begin -->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"></activity>
+
+        <activity
+            android:name="com.alipay.sdk.auth.AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"></activity>
+        <!-- alipaysdk end -->
+
+        <activity
+            android:name="com.unicom.dcLoader.welcomeview"
+            android:configChanges="keyboardHidden|screenSize|navigation|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="sensor"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="UNICOM_DIST_ACTIVITY"
+                android:value="com.yuyou.yiyuanduobao.welcome.WelcomeActivity" />
+        </activity>
+
+
+        <!--SDK 1.0的参数-->
         <meta-data
             android:name="wostore_channel_data_cpid"
             android:value="cpid_86009225" />
@@ -62,22 +124,61 @@
             android:name=".welcome.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:windowSoftInputMode="adjustPan|stateHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".login.LoginActivity"
             android:configChanges="orientation|keyboardHidden"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".newplay.NewPlayerActivity"
+        <activity
+            android:name=".newplay.NewPlayerActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/FullScreen"/>
+            android:theme="@style/FullScreen" />
+
         <service
             android:name=".download.DownLoadService"
             android:priority="1000" />
+
+
+        <!--<activity-->
+            <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:name="me.leefeng.library.Permission.AppSettingsDialogHolderActivity"-->
+            <!--android:exported="false" />-->
+
+        <!--<activity-->
+            <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:name="pub.devrel.easypermissions.AppSettingsDialogHolderActivity"-->
+            <!--android:exported="false" />-->
+
+
+        <meta-data
+            android:name="APPLICATION_CLASS_NAME"
+            android:value="com.yuyou.yiyuanduobao.ProjectApplication" />
+
+
+        <!--bugly-->
+        <!-- 配置APP ID -->
+        <meta-data
+            android:name="BUGLY_APPID"
+            android:value="15da576048" />
+        <!-- 配置APP版本号 -->
+        <meta-data
+            android:name="BUGLY_APP_VERSION"
+            android:value="1.4.4" />
+        <!-- 配置APP渠道号 -->
+        <meta-data
+            android:name="BUGLY_APP_CHANNEL"
+            android:value="" />
+        <!-- 配置Bugly调试模式（true或者false）-->
+        <meta-data
+            android:name="BUGLY_ENABLE_DEBUG"
+            android:value="false" />
     </application>
 
 </manifest>
