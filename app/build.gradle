@@ -9,8 +9,8 @@ android {
         applicationId "com.yuyou.yiyuanduobao"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 3
-        versionName "1.4.4"
+        versionCode 4
+        versionName "1.4.5"
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         //分开打包
@@ -115,7 +115,9 @@ dependencies {
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
     //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
-    compile 'com.github.limxing:Android-PromptDialog:1.0.3'
+
+    //PromptDialog
+    compile 'com.github.limxing:Android-PromptDialog:1.1.2'
     //    compile group: 'org.robolectric', name: 'android-all', version: '5.0.0_r2-robolectric-1'//SubscriptionManager
     compile files('libs/lite-orm-1.9.2.jar')
     provided files('runtime/unicompay_ref.jar')

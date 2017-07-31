@@ -160,6 +160,7 @@ private  Utils.UnipayPayResultListener OnLineListener = new Utils.UnipayPayResul
             case 2://fail
                 //此处放置支付请求失败的相关处理代码
                 showPayResultOnLine(currentCurse.getName() + " " + "支付失败");
+                LogUtils.i("FAIL:"+arg0+"=="+arg3);
                 break;
 
             case 3://cancel
@@ -195,7 +196,7 @@ private  Utils.UnipayPayResultListener OnLineListener = new Utils.UnipayPayResul
         currentCurse=course;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         if (sOrderId.length() > 24){
-            Utils.getInstances().payOnline(mContext, "001", "170522582109",sOrderId.substring(0,24),OnLineListener);
+            Utils.getInstances().payOnline(mContext, "001", "0",sOrderId.substring(0,24),OnLineListener);
         }else {
 
             Utils.getInstances().payOnline(mContext, "001", "170522582109", sOrderId, OnLineListener);
