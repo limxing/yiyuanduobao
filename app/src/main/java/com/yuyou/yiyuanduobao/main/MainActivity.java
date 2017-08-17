@@ -190,17 +190,24 @@ private  Utils.UnipayPayResultListener OnLineListener = new Utils.UnipayPayResul
 
     @Override
     public void payView(final String sOrderId, final String sVacCode, final Course course) {
+
         LogUtils.i("orderId:" + sOrderId + "==vacCode:" + sVacCode);
 //        svp.dismissImmediately();
         promptDialog.dismissImmediately();
         currentCurse=course;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+//        Utils.getInstances().payChannel(mContext, "一元夺宝", getString(R.string.company), sVacCode, "1金币", "1.00", sOrderId, "", "", "", OnLineListener);
+        String orderId = sOrderId;
         if (sOrderId.length() > 24){
-            Utils.getInstances().payOnline(mContext, "001", "0",sOrderId.substring(0,24),OnLineListener);
+//            Utils.getInstances().payOnline(mContext, "001", "0",sOrderId.substring(0,24),OnLineListener);
+            orderId =   sOrderId.substring(0,24);
         }else {
 
-            Utils.getInstances().payOnline(mContext, "001", "170522582109", sOrderId, OnLineListener);
+//            Utils.getInstances().payOnline(mContext, "001", "0", sOrderId, OnLineListener);
         }
+        Utils.getInstances().payOnline(mContext, "001", "0", orderId, OnLineListener);
+//        Utils.getInstances().payChannel(mContext, "支付网络课程《" + course.getName() + "》", getString(R.string.company), sVacCode,
+//                "1 金币", "1.00", "1","001","0",orderId,OnLineListener);
 //        Utils.getInstances().pay(mContext, "001",sOrderId,OnLineListener);
 //        Utils.getInstances().
 //        Utils.getInstances().payOnline(mContext, "001", "0",sOrderId,OnLineListener);

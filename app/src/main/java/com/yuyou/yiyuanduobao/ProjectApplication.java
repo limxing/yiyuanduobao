@@ -35,7 +35,7 @@ public class ProjectApplication extends UnicomApplicationWrapper {
 
     public static ProjectApplication application;
 
-    public static boolean isDebug = true;
+    public static boolean isDebug = false;
     public static Context attachContext;
 
     public static LiteOrm liteOrm;

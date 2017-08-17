@@ -329,8 +329,7 @@ public class MainPresenter implements MainPreInterface {
 
     public String getCode() throws JSONException, IOException {
 
-        String url = "http://mobilepay.wocheng.tv:8090/wochengPay/wosdk/generateOrderId?channelCode=50021" +
-                "&protocolVersion=1001";
+        String url = "http://mobilepay.wocheng.tv:8090/wochengPay/wosdk/generateOrderId?channelCode=50021&protocolVersion=1001";
         JSONObject json = new JSONObject();
         json.put("spcode", "1001");
         json.put("appid", "557950046");

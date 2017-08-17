@@ -220,6 +220,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeView, EasyPe
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
+        ToastUtils.showLong(ProjectApplication.application,"请先开启应用权限");
         finish();
     }
 
